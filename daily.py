@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 """库博标准 · 每日学习包 · 云端版
 
-每天在 GitHub Actions 上运行：
-  1. 抓新闻（Google News RSS）+ 行情（Yahoo Finance）
-  2. 调 DeepSeek 两次：一次写英语+产品专题，一次写新闻+解读
-     （拆成两次是为了让新闻有足够篇幅，不会被专业课挤占或截断）
-  3. 写成 docs/ 下的静态网页（GitHub Pages 直接可看）
-  4. 推送到飞书 / 钉钉 / 企业微信机器人
+每天在 GitHub Actions 上运行，输出**两份独立文档**：
+
+  1. 学习包（英语 25 分钟 + 产品专题 25 分钟）
+  2. 每日新闻（5–6 分钟读完，每条自带「是什么事」+「我的理解」）
+
+新闻事实来自快讯接口的正文（新浪 7x24、华尔街见闻），
+所以不需要点进原文就能知道发生了什么。
 
 环境变量：
   DEEPSEEK_API_KEY  必填
   PUSH_WEBHOOK      选填，群机器人地址
   GITHUB_REPOSITORY 由 Actions 提供，用来拼站点地址
+  FORCE_DATE        选填，补发指定日期 YYYY-MM-DD
 """
 
 from __future__ import annotations
@@ -53,7 +55,54 @@ def _get(url: str, headers: dict | None = None, timeout: int = 25) -> bytes:
     raise last  # type: ignore[misc]
 
 
+def _clean(text: str, limit: int = 320) -> str:
+    text = re.sub(r"<[^>]+>", "", text or "")
+    text = re.sub(r"\s+", " ", text).strip()
+    return text[:limit]
+
+
+def wallstreetcn(channel: str, limit: int = 10) -> list[str]:
+    """华尔街见闻快讯：全球 / A 股 / 美股，正文完整。"""
+    url = (
+        "https://api-one.wallstcn.com/apiv1/content/lives"
+        f"?channel={channel}&client=pc&limit={limit}"
+    )
+    try:
+        data = json.loads(_get(url, timeout=25))
+        items = data["data"]["items"]
+    except Exception as exc:
+        print(f"[news] wsc {channel} 失败: {exc}", file=sys.stderr)
+        return []
+    out = []
+    for it in items:
+        txt = _clean(it.get("content_text") or "")
+        if len(txt) > 20:
+            out.append(f"- {txt}")
+    return out
+
+
+def sina_flash(limit: int = 14) -> list[str]:
+    """新浪财经 7x24 快讯，正文完整。"""
+    url = (
+        "https://zhibo.sina.com.cn/api/zhibo/feed"
+        f"?page=1&page_size={limit}&zhibo_id=152&tag_id=0&dire=f&dpc=1"
+    )
+    try:
+        data = json.loads(_get(url, timeout=25))
+        items = data["result"]["data"]["feed"]["list"]
+    except Exception as exc:
+        print(f"[news] sina 失败: {exc}", file=sys.stderr)
+        return []
+    out = []
+    for it in items:
+        txt = _clean(it.get("rich_text") or "")
+        if len(txt) > 20:
+            out.append(f"- {txt}")
+    return out
+
+
 def google_news(query: str, limit: int = 8) -> list[str]:
+    """行业标题（只有标题，没有正文），用于补汽车/密封这类垂直话题。"""
     url = (
         "https://news.google.com/rss/search?q="
         + urllib.parse.quote(query)
@@ -61,16 +110,14 @@ def google_news(query: str, limit: int = 8) -> list[str]:
     )
     try:
         root = ET.fromstring(_get(url))
-    except Exception as exc:  # 网络问题不应中断整篇
-        print(f"[news] {query} 抓取失败: {exc}", file=sys.stderr)
+    except Exception as exc:
+        print(f"[news] google {query} 失败: {exc}", file=sys.stderr)
         return []
     out = []
     for item in root.iter("item"):
         title = (item.findtext("title") or "").strip()
-        link = (item.findtext("link") or "").strip()
-        when = (item.findtext("pubDate") or "")[:16]
         if title:
-            out.append(f"- {title}｜{when}｜{link}")
+            out.append(f"- {title}")
         if len(out) >= limit:
             break
     return out
@@ -127,13 +174,14 @@ def market_quotes() -> list[str]:
 # ---------------------------------------------------------------- 生成
 
 SYSTEM_LESSON = """你是一位资深汽车密封系统工程师，同时是英语教练。
-你为「库博标准（Cooper Standard）密封系统产品开发培训生」写每日学习包的上半部分。
+你为「库博标准（Cooper Standard）密封系统产品开发培训生」写每日学习包。
 写作要求：中文讲解、英文术语并列；专业、具体、可执行；不说空话套话。
 只输出 Markdown 正文，不要任何前言或说明。"""
 
 SYSTEM_NEWS = """你是一位兼做行业分析的财经编辑，长期跟踪汽车零部件与密封系统行业。
-你为「库博标准（Cooper Standard）密封系统产品开发培训生」写每日新闻解读。
-写作要求：事实与判断严格分开；判断要有因果链和可验证的观察指标；不喊口号。
+你为「库博标准（Cooper Standard）密封系统产品开发培训生」写每日新闻简报。
+读者只有 5 分钟，所以每条都要说清"发生了什么"，不要让他再去点原文。
+事实与判断严格分开，判断要有因果链和可验证的观察指标。
 只输出 Markdown 正文，不要任何前言或说明。"""
 
 
@@ -167,53 +215,52 @@ def build_lesson_prompt(day_no: int, date: dt.date, en_focus: str, product_topic
 10. 延伸到当前产品与技术方向（可提及库博标准 Fortrex / FlexiFit / FlexiCore 等公开产品线）
 11. 自测 5 题 + 「### 参考答案」（不要用 details 标签）
 
-长度：正文 3000–3800 字，必须完整写完自测答案，不得中途截断。
+长度：正文 3000–3800 字，必须完整写完参考答案，不得中途截断。
 所有英文术语首次出现给中文。"""
 
 
-def build_news_prompt(day_no: int, date: dt.date, product_topic: str,
-                      news: dict[str, list[str]], quotes: list[str],
-                      compact: bool = False) -> str:
-    per = 4 if compact else 6
+def build_news_prompt(date: dt.date, product_topic: str,
+                      feeds: dict[str, list[str]], quotes: list[str]) -> str:
     blocks = []
-    for k, v in news.items():
-        picked = v[:per] if v else []
-        blocks.append(f"### {k}\n" + ("\n".join(picked) if picked else "- 未获取到"))
-    news_text = "\n\n".join(blocks)
+    for k, v in feeds.items():
+        blocks.append(f"### 素材：{k}\n" + ("\n".join(v) if v else "- 未获取到"))
+    material = "\n\n".join(blocks)
     quote_text = "、".join(quotes) if quotes else "未获取到"
-    length = "1500–1800 字" if compact else "1800–2400 字"
 
-    return f"""今天是 {date:%Y-%m-%d}，第 {day_no} 天。今天的专业主题是「{product_topic}」。
+    return f"""今天是 {date:%Y-%m-%d}。读者是库博标准密封系统产品开发培训生，今天他的专业主题是「{product_topic}」。
 
-# 今日素材（只能使用这些事实，禁止编造行情数字、禁止虚构新闻）
+# 素材（只能使用这些内容，禁止编造数字、禁止补充素材里没有的事实）
 
-## 新闻标题（含来源链接）
-{news_text}
+{material}
 
 ## 行情快照
 {quote_text}
 
 # 输出要求
 
-第一行必须是：`## Part 3 新闻 + 我的理解 15 分钟`
+第一行固定为：`# 每日新闻 · {date:%Y-%m-%d}`
 
-接着按顺序写：
+然后：
 
-### 今日主线
-3–4 条，把今天最值得注意的事串成一条逻辑线（不是罗列）。
+## 今日三件事
+3 条，每条一句话说清「发生了什么」，按重要性排序。
 
-### 世界 / ### 中国 / ### 汽车行业 / ### 密封与零部件 / ### 经济与市场
-每块两段：
-- **事实**：用满素材里的标题，每条只占一行，格式 `- 标题 — [来源](链接)`。
-  **链接必须写成 Markdown 链接，绝对不要把网址明文写在正文里**；不要写日期，不要改写事实。
-- **我的理解**：比事实更长更实，必须含 ① 因果链 ② 二阶影响（传导到谁、谁受损谁受益）③ 该盯的指标（具体到可查的数字或事件）。标注「这是我的判断，不是新闻内容」。
+## 世界 / ## 中国 / ## 行业 / ## 市场
+每块 2–3 条。每条用这个格式：
 
-### Part 4 收尾
-必须写完整，不能省略：
-- 「今天记住三句话」：产品、行业、市场各一条。
-- 「对你的实操含义」：3–4 条，连到密封系统产品开发岗位。
+### 一句话标题
+**是什么事**：1–2 句，把事实讲完整，让读者不点原文也知道发生了什么。有数字就写数字，有来源就标来源。
+**我的理解**：1–2 句。为什么重要、会传导到哪里、该盯什么指标。
 
-长度：正文 {length}。宁可少写两条新闻，也必须把 Part 4 写完。"""
+## 一句话总结
+用一句话说清今天最该记住的趋势。
+
+# 硬性规则
+- 总条数 9–12 条，总长度 1100–1500 字，控制在 5–6 分钟能读完。
+- 优先选重要的：宏观政策、地缘冲突、汽车与零部件、原材料价格、龙头公司动向、市场异动。
+- 素材是完整正文的，可以放心写细节；素材只有标题的（汽车行业那组），**只写标题能确定的信息**，标题看不懂就整条略过，不要猜。
+- 「我的理解」必须标注为判断，不能与事实混在一起。
+- 不要输出链接，读者不需要点进去。"""
 
 
 def call_llm(prompt: str, system: str, max_tokens: int) -> str:
@@ -241,27 +288,6 @@ def call_llm(prompt: str, system: str, max_tokens: int) -> str:
     if choice.get("finish_reason") == "length":
         print("[warn] 输出达到 max_tokens，可能被截断", file=sys.stderr)
     return text
-
-
-def compact_links(md: str) -> str:
-    """把正文里的裸网址收成 Markdown 链接。
-
-    手机上一条 150 字符的 Google 跳转链接会占五六行，正文完全没法读，
-    所以统一转成「[来源](url)」，只显示几个字。
-    """
-    # 1) 标题（来源）｜https://...  →  标题 — [来源](https://...)
-    md = re.sub(
-        r"（([^）]{1,24})）\s*[｜|]\s*(https?://[^\s）]+)",
-        lambda m: f" — [{m.group(1)}]({m.group(2)})",
-        md,
-    )
-    # 2) 残留的 ｜https://...  →  — [原文](https://...)
-    md = re.sub(
-        r"\s*[｜|]\s*(https?://[^\s）]+)",
-        lambda m: f" — [原文]({m.group(1)})",
-        md,
-    )
-    return md
 
 
 # ---------------------------------------------------------------- 渲染
@@ -297,7 +323,9 @@ th{background:var(--code);font-weight:650;white-space:nowrap}
 background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);
 border-bottom:1px solid var(--line);font-size:.92em}
 .topbar a{text-decoration:none;font-weight:600}
-.cards{display:grid;gap:12px;margin-top:1.4em}
+.sec{margin:2.2em 0 .6em;font-size:.8em;letter-spacing:.08em;text-transform:uppercase;
+color:var(--muted);font-weight:700}
+.cards{display:grid;gap:12px;margin:.6em 0 1.4em}
 .card{display:block;padding:16px 18px;background:var(--card);border:1px solid var(--line);
 border-radius:14px;text-decoration:none;color:inherit}
 .card .d{font-size:.78em;color:var(--accent2);font-weight:600;letter-spacing:.04em}
@@ -326,27 +354,37 @@ def render(md_text: str, title: str) -> str:
     return PAGE.format(title=html.escape(title), css=CSS, body=back + body)
 
 
+def _title_of(path: Path) -> str:
+    html_path = path.with_suffix(".html")
+    if html_path.exists():
+        m = re.search(r"<title>(.*?)</title>", html_path.read_text(encoding="utf-8"), re.S)
+        if m:
+            return html.unescape(m.group(1))
+    return path.stem
+
+
 def rebuild_index() -> None:
-    items = []
-    for p in sorted(DOCS.glob("*.html")):
-        if p.name in ("index.html", "today.html"):
-            continue
-        text = p.read_text(encoding="utf-8")
-        m = re.search(r"<title>(.*?)</title>", text, re.S)
-        title = html.unescape(m.group(1)) if m else p.stem
-        d = re.search(r"(\d{4}-\d{2}-\d{2})", p.name)
-        items.append((d.group(1) if d else p.stem, title, p.name))
-    items.sort(reverse=True)
-    cards = "".join(
-        f'<a class="card" href="{html.escape(n)}"><div class="d">{html.escape(d)}</div>'
-        f'<div class="t">{html.escape(t)}</div></a>'
-        for d, t, n in items
-    ) or "<p>还没有内容。</p>"
+    def cards(pattern: str, drop: str) -> str:
+        items = []
+        for p in sorted(DOCS.glob(pattern), reverse=True):
+            d = re.search(r"(\d{4}-\d{2}-\d{2})", p.name)
+            if not d:
+                continue
+            items.append((d.group(1), _title_of(p), p.with_suffix(".html").name))
+        return "".join(
+            f'<a class="card" href="{html.escape(n)}"><div class="d">{html.escape(d)}</div>'
+            f'<div class="t">{html.escape(t)}</div></a>'
+            for d, t, n in items
+        ) or "<p>还没有内容。</p>"
+
     body = (
         "<h1>库博标准 · 每日学习包</h1>"
-        "<p>英语 25 分钟 · 产品专题 25 分钟 · 新闻解读 15 分钟</p>"
-        f'<div class="cards">{cards}</div>'
-        f"<footer>更新于 {dt.datetime.now(CST):%Y-%m-%d %H:%M} · 共 {len(items)} 期</footer>"
+        "<p>每天两份：一份学英语和专业知识，一份 5 分钟看完新闻。</p>"
+        '<div class="sec">学习包 · 英语 + 产品专题</div>'
+        f'<div class="cards">{cards("*-lesson.md", "lesson")}</div>'
+        '<div class="sec">每日新闻 · 5 分钟</div>'
+        f'<div class="cards">{cards("*-news.md", "news")}</div>'
+        f"<footer>更新于 {dt.datetime.now(CST):%Y-%m-%d %H:%M}</footer>"
     )
     (DOCS / "index.html").write_text(
         PAGE.format(title="库博标准 · 每日学习包", css=CSS, body=body), encoding="utf-8"
@@ -400,46 +438,49 @@ def main() -> None:
         day_no = 1
     en_focus, product_topic = topic_for(day_no)
 
-    news = {
-        "世界": google_news("国际局势 OR 地缘政治 OR 中东 when:7d", 8),
-        "中国": google_news("中国经济 OR 宏观政策 when:7d", 8),
-        "汽车行业": google_news("汽车 新能源 产销 乘用车 when:7d", 8),
-        "密封与零部件": google_news("汽车零部件 OR 橡胶 OR 密封 when:7d", 6),
-        "市场": google_news("A股 OR 美股 OR 财报 when:7d", 8),
-    }
-    quotes = market_quotes()
-
     print(f"[gen] Day {day_no} {today} · {product_topic}")
     lesson = call_llm(build_lesson_prompt(day_no, today, en_focus, product_topic),
                       SYSTEM_LESSON, 8192)
-    print("[gen] 新闻与解读")
-    bulletin = call_llm(build_news_prompt(day_no, today, product_topic, news, quotes),
-                        SYSTEM_NEWS, 8192)
-    if "记住三句话" not in bulletin:  # 兜底：输出被截断就压缩重试一次
-        print("[retry] 新闻输出不完整，用精简模式重试", file=sys.stderr)
-        bulletin = call_llm(
-            build_news_prompt(day_no, today, product_topic, news, quotes, compact=True),
-            SYSTEM_NEWS, 8192,
-        )
-    md_text = compact_links(lesson.rstrip() + "\n\n---\n\n" + bulletin.lstrip())
+
+    feeds = {
+        "全球快讯（正文完整）": wallstreetcn("global-channel", 10),
+        "中国财经快讯（正文完整）": sina_flash(14),
+        "美股与海外市场（正文完整）": wallstreetcn("us-stock-channel", 6),
+        "汽车行业标题（只有标题）": google_news("汽车 新能源 产销 乘用车 when:3d", 8),
+        "密封与零部件标题（只有标题）": google_news("汽车零部件 OR 橡胶 OR 密封 when:7d", 5),
+    }
+    quotes = market_quotes()
+
+    print("[gen] 每日新闻")
+    bulletin = call_llm(build_news_prompt(today, product_topic, feeds, quotes),
+                        SYSTEM_NEWS, 5000)
+    if "一句话总结" not in bulletin:  # 兜底：输出被截断就重试一次
+        print("[retry] 新闻输出不完整，重试", file=sys.stderr)
+        bulletin = call_llm(build_news_prompt(today, product_topic, feeds, quotes),
+                            SYSTEM_NEWS, 5000)
 
     DOCS.mkdir(exist_ok=True)
-    stem = f"{today:%Y-%m-%d}-Day{day_no:02d}"
-    title = f"Day {day_no:02d} · {today:%Y-%m-%d}｜{product_topic}"
+    lesson_stem = f"{today:%Y-%m-%d}-Day{day_no:02d}-lesson"
+    news_stem = f"{today:%Y-%m-%d}-news"
+    lesson_title = f"Day {day_no:02d} · {today:%Y-%m-%d}｜{product_topic}"
+    news_title = f"每日新闻 · {today:%Y-%m-%d}"
 
-    (DOCS / f"{stem}.md").write_text(md_text, encoding="utf-8")
-    (DOCS / f"{stem}.html").write_text(render(md_text, title), encoding="utf-8")
+    for stem, text, title in ((lesson_stem, lesson, lesson_title),
+                              (news_stem, bulletin, news_title)):
+        (DOCS / f"{stem}.md").write_text(text, encoding="utf-8")
+        (DOCS / f"{stem}.html").write_text(render(text, title), encoding="utf-8")
+
     # 稳定的“今天”地址，方便加到主屏幕或推送链接
-    (DOCS / "today.html").write_text(render(md_text, title), encoding="utf-8")
+    (DOCS / "today.html").write_text(render(lesson, lesson_title), encoding="utf-8")
+    (DOCS / "today-news.html").write_text(render(bulletin, news_title), encoding="utf-8")
     rebuild_index()
 
-    url = f"{site_url()}{stem}.html"
-    lines = [f"【Day {day_no:02d}】{product_topic}", f"英语：{en_focus}", "", "今日新闻："]
-    lines += [ln.split("｜")[0].lstrip("- ")[:46] for ln in news["汽车行业"][:4]]
-    if url:
-        lines += ["", f"全文：{url}"]
+    base = site_url()
+    lines = [f"【Day {day_no:02d}】{product_topic}", f"英语：{en_focus}", ""]
+    if base:
+        lines += [f"学习包：{base}today.html", f"新闻：{base}today-news.html"]
     push("\n".join(lines))
-    print("[done]", stem)
+    print("[done]", lesson_stem, news_stem)
 
 
 if __name__ == "__main__":
