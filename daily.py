@@ -2,8 +2,9 @@
 """库博标准 · 每日学习包 · 云端版
 
 每天在 GitHub Actions 上运行：
-  1. 抓新闻（Google News RSS）+ 行情（新浪 / Yahoo）
-  2. 调 DeepSeek 生成当天学习包
+  1. 抓新闻（Google News RSS）+ 行情（Yahoo Finance）
+  2. 调 DeepSeek 两次：一次写英语+产品专题，一次写新闻+解读
+     （拆成两次是为了让新闻有足够篇幅，不会被专业课挤占或截断）
   3. 写成 docs/ 下的静态网页（GitHub Pages 直接可看）
   4. 推送到飞书 / 钉钉 / 企业微信机器人
 
@@ -52,7 +53,7 @@ def _get(url: str, headers: dict | None = None, timeout: int = 25) -> bytes:
     raise last  # type: ignore[misc]
 
 
-def google_news(query: str, limit: int = 6) -> list[str]:
+def google_news(query: str, limit: int = 8) -> list[str]:
     url = (
         "https://news.google.com/rss/search?q="
         + urllib.parse.quote(query)
@@ -125,41 +126,28 @@ def market_quotes() -> list[str]:
 
 # ---------------------------------------------------------------- 生成
 
-
-SYSTEM = """你是一位资深汽车密封系统工程师，同时是英语教练和财经分析师。
-你为「库博标准（Cooper Standard）密封系统产品开发培训生」写每日学习包。
+SYSTEM_LESSON = """你是一位资深汽车密封系统工程师，同时是英语教练。
+你为「库博标准（Cooper Standard）密封系统产品开发培训生」写每日学习包的上半部分。
 写作要求：中文讲解、英文术语并列；专业、具体、可执行；不说空话套话。
 只输出 Markdown 正文，不要任何前言或说明。"""
 
+SYSTEM_NEWS = """你是一位兼做行业分析的财经编辑，长期跟踪汽车零部件与密封系统行业。
+你为「库博标准（Cooper Standard）密封系统产品开发培训生」写每日新闻解读。
+写作要求：事实与判断严格分开；判断要有因果链和可验证的观察指标；不喊口号。
+只输出 Markdown 正文，不要任何前言或说明。"""
 
-def build_prompt(day_no: int, date: dt.date, en_focus: str, product_topic: str,
-                 news: dict[str, list[str]], quotes: list[str]) -> str:
-    blocks = []
-    for k, v in news.items():
-        blocks.append(f"### {k}\n" + ("\n".join(v) if v else "- 未获取到"))
-    news_text = "\n\n".join(blocks)
-    quote_text = "、".join(quotes) if quotes else "未获取到"
 
+def build_lesson_prompt(day_no: int, date: dt.date, en_focus: str, product_topic: str) -> str:
     return f"""今天是 {date:%Y-%m-%d}，第 {day_no} 天。
 
 今天的英语重点：{en_focus}
 今天的产品专题：{product_topic}
 
-# 今日素材（只能使用这些事实，禁止编造行情数字或新闻）
-
-## 新闻标题（含来源链接）
-{news_text}
-
-## 行情快照
-{quote_text}
-
-# 输出要求
-
-写四部分，Markdown 格式，表格用标准 Markdown 表格：
+写下面两部分，Markdown 格式，表格用标准 Markdown 表格。
 
 ## Part 1 英语 25 分钟
-1. 语音热身 3min：三个中国人常见错音 + 最小对立练习。
-2. 影子跟读 8min：两段真实工作场景稿（各 30–60 秒英文原文），给发音点、连读弱读、节奏。
+1. 语音热身 3min：三个中国人常见错音 + 最小对立练习（表格：错在哪 / 典型读法 / 正确读法 / 最小对立）。
+2. 影子跟读 8min：两段真实工作场景稿（各 30–60 秒英文原文），逐条给发音点、连读弱读、节奏。
 3. 功能句 6 组 6min：表格，列为「场景 / 直接版 / 委婉版」。
 4. 词汇 12 个 6min：表格，列为「词 / 音标 / 释义 / 搭配」，再给一个词族或词根词缀专栏。
 5. 场景对话 4min：6–8 轮 A/B 对话，标出地道表达。
@@ -179,40 +167,74 @@ def build_prompt(day_no: int, date: dt.date, en_focus: str, product_topic: str,
 10. 延伸到当前产品与技术方向（可提及库博标准 Fortrex / FlexiFit / FlexiCore 等公开产品线）
 11. 自测 5 题 + 「### 参考答案」（不要用 details 标签）
 
-## Part 3 新闻 + 我的理解 10 分钟
-分「世界 / 中国 / 汽车行业 / 经济与市场」四块。
-每块先列**事实**（只能用上面素材里的标题，保留链接），再写「**我的理解**」：
-因果链、二阶影响、该盯什么指标。明确标注这是我的判断，不是新闻内容。
+长度：正文 3000–3800 字，必须完整写完自测答案，不得中途截断。
+所有英文术语首次出现给中文。"""
+
+
+def build_news_prompt(day_no: int, date: dt.date, product_topic: str,
+                      news: dict[str, list[str]], quotes: list[str]) -> str:
+    blocks = []
+    for k, v in news.items():
+        blocks.append(f"### {k}\n" + ("\n".join(v) if v else "- 未获取到"))
+    news_text = "\n\n".join(blocks)
+    quote_text = "、".join(quotes) if quotes else "未获取到"
+
+    return f"""今天是 {date:%Y-%m-%d}，第 {day_no} 天。今天的专业主题是「{product_topic}」。
+
+# 今日素材（只能使用这些事实，禁止编造行情数字、禁止虚构新闻）
+
+## 新闻标题（含来源链接）
+{news_text}
+
+## 行情快照
+{quote_text}
+
+# 输出要求
+
+## Part 3 新闻 + 我的理解 15 分钟
+
+先写 **## 今日主线**：3–4 条，把今天最值得注意的事串成一条逻辑线（不是罗列）。
+
+然后按「世界 / 中国 / 汽车行业 / 密封与零部件 / 经济与市场」五块分别写：
+- **事实**：尽量用满素材里的标题（每块 5–8 条），格式 `- 标题（来源）｜链接`，不要改写事实。
+- **我的理解**：这一段要比事实更长、更实。必须包含：
+  ① 因果链（为什么会这样）；
+  ② 二阶影响（接下来会传导到哪里，谁受损谁受益）；
+  ③ 该盯的指标（具体到可查的数字或事件）。
+  明确标注「这是我的判断，不是新闻内容」。
 
 ## Part 4 收尾
-- 「今天记住三句话」
-- 「对你的实操含义」：连到密封系统产品开发岗位
+- 「今天记住三句话」：一条关于产品、一条关于行业、一条关于市场。
+- 「对你的实操含义」：3–4 条，连到密封系统产品开发岗位的日常工作。
 
-长度：正文 2600–3400 字，必须完整写完 Part 4 的四条，不得中途截断。
-所有英文术语首次出现给中文。新闻部分不要逐条复述标题，只挑最关键的事实，其余合并成一句话。"""
+长度：正文 2200–2800 字。事实部分保留链接；解读部分不要复读标题。"""
 
 
-def call_llm(prompt: str) -> str:
+def call_llm(prompt: str, system: str, max_tokens: int) -> str:
     key = os.environ.get("DEEPSEEK_API_KEY")
     if not key:
         raise SystemExit("缺少环境变量 DEEPSEEK_API_KEY")
     body = json.dumps({
         "model": os.environ.get("DEEPSEEK_MODEL", "deepseek-chat"),
         "messages": [
-            {"role": "system", "content": SYSTEM},
+            {"role": "system", "content": system},
             {"role": "user", "content": prompt},
         ],
         "temperature": 0.75,
-        "max_tokens": 8192,
+        "max_tokens": max_tokens,
     }).encode()
     req = urllib.request.Request(
         "https://api.deepseek.com/chat/completions",
         data=body,
         headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
     )
-    with urllib.request.urlopen(req, timeout=600) as r:
+    with urllib.request.urlopen(req, timeout=900) as r:
         data = json.loads(r.read())
-    return data["choices"][0]["message"]["content"].strip()
+    choice = data["choices"][0]
+    text = choice["message"]["content"].strip()
+    if choice.get("finish_reason") == "length":
+        print("[warn] 输出达到 max_tokens，可能被截断", file=sys.stderr)
+    return text
 
 
 # ---------------------------------------------------------------- 渲染
@@ -295,7 +317,7 @@ def rebuild_index() -> None:
     ) or "<p>还没有内容。</p>"
     body = (
         "<h1>库博标准 · 每日学习包</h1>"
-        "<p>英语 25 分钟 · 产品专题 25 分钟 · 新闻解读 10 分钟</p>"
+        "<p>英语 25 分钟 · 产品专题 25 分钟 · 新闻解读 15 分钟</p>"
         f'<div class="cards">{cards}</div>'
         f"<footer>更新于 {dt.datetime.now(CST):%Y-%m-%d %H:%M} · 共 {len(items)} 期</footer>"
     )
@@ -347,17 +369,21 @@ def main() -> None:
     en_focus, product_topic = topic_for(day_no)
 
     news = {
-        "世界": google_news("国际局势 OR 地缘政治 OR 中东 when:7d", 4),
-        "中国": google_news("中国经济 OR 宏观政策 when:7d", 4),
-        "汽车行业": google_news("汽车 新能源 产销 乘用车 when:7d", 5),
-        "密封与零部件": google_news("汽车零部件 OR 橡胶 OR 密封 when:7d", 3),
-        "市场": google_news("A股 OR 美股 OR 财报 when:7d", 4),
+        "世界": google_news("国际局势 OR 地缘政治 OR 中东 when:7d", 8),
+        "中国": google_news("中国经济 OR 宏观政策 when:7d", 8),
+        "汽车行业": google_news("汽车 新能源 产销 乘用车 when:7d", 8),
+        "密封与零部件": google_news("汽车零部件 OR 橡胶 OR 密封 when:7d", 6),
+        "市场": google_news("A股 OR 美股 OR 财报 when:7d", 8),
     }
     quotes = market_quotes()
 
-    prompt = build_prompt(day_no, today, en_focus, product_topic, news, quotes)
     print(f"[gen] Day {day_no} {today} · {product_topic}")
-    md_text = call_llm(prompt)
+    lesson = call_llm(build_lesson_prompt(day_no, today, en_focus, product_topic),
+                      SYSTEM_LESSON, 8192)
+    print("[gen] 新闻与解读")
+    bulletin = call_llm(build_news_prompt(day_no, today, product_topic, news, quotes),
+                        SYSTEM_NEWS, 6000)
+    md_text = lesson.rstrip() + "\n\n---\n\n" + bulletin.lstrip()
 
     DOCS.mkdir(exist_ok=True)
     stem = f"{today:%Y-%m-%d}-Day{day_no:02d}"
@@ -365,13 +391,13 @@ def main() -> None:
 
     (DOCS / f"{stem}.md").write_text(md_text, encoding="utf-8")
     (DOCS / f"{stem}.html").write_text(render(md_text, title), encoding="utf-8")
-    # 让当天成为站点首页
+    # 稳定的“今天”地址，方便加到主屏幕或推送链接
     (DOCS / "today.html").write_text(render(md_text, title), encoding="utf-8")
     rebuild_index()
 
     url = f"{site_url()}{stem}.html"
     lines = [f"【Day {day_no:02d}】{product_topic}", f"英语：{en_focus}", "", "今日新闻："]
-    lines += [ln.split("｜")[0].lstrip("- ")[:46] for ln in news["汽车行业"][:3]]
+    lines += [ln.split("｜")[0].lstrip("- ")[:46] for ln in news["汽车行业"][:4]]
     if url:
         lines += ["", f"全文：{url}"]
     push("\n".join(lines))
