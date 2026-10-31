@@ -1,0 +1,541 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16181a" media="(prefers-color-scheme: dark)">
+<title>Day 01 · 2026-10-31｜硬度 durometer 全解</title><style>
+:root{--bg:#fbfaf7;--fg:#1c1b19;--muted:#6b6862;--line:#e2ded6;--card:#fff;
+--accent:#0a6b5f;--accent2:#b4531a;--code:#f2efe9}
+@media (prefers-color-scheme:dark){:root{--bg:#16181a;--fg:#e8e6e1;--muted:#9a968e;
+--line:#2c2f33;--card:#1e2124;--accent:#5fd3bd;--accent2:#e6a06a;--code:#24282c}}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0 auto;background:var(--bg);color:var(--fg);max-width:760px;
+font:17px/1.78 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+padding:20px 18px 72px;word-break:break-word;overflow-wrap:anywhere}
+h1{font-size:1.6em;line-height:1.35;margin:.2em 0 .8em}
+h1::after{content:"";display:block;width:46px;height:3px;margin-top:.5em;
+background:var(--accent);border-radius:2px}
+h2{font-size:1.26em;margin:2em 0 .6em;padding-top:.9em;border-top:1px solid var(--line)}
+h3{font-size:1.08em;margin:1.6em 0 .5em;color:var(--accent)}
+p{margin:.75em 0}a{color:var(--accent)}
+blockquote{margin:1em 0;padding:.7em 1em;border-left:3px solid var(--accent2);
+background:var(--card);border-radius:0 8px 8px 0;color:var(--muted)}
+ul,ol{padding-left:1.35em}li{margin:.36em 0}
+code{background:var(--code);padding:.14em .38em;border-radius:5px;
+font:.88em/1.5 ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--code);padding:14px 16px;border-radius:10px;overflow-x:auto;font-size:.86em}
+pre code{background:none;padding:0}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.1em -18px;padding:0 18px}
+table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:var(--code);font-weight:650;white-space:nowrap}
+.topbar{position:sticky;top:0;z-index:9;margin:-20px -18px 18px;padding:11px 18px;
+background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);
+border-bottom:1px solid var(--line);font-size:.92em}
+.topbar a{text-decoration:none;font-weight:600}
+.cards{display:grid;gap:12px;margin-top:1.4em}
+.card{display:block;padding:16px 18px;background:var(--card);border:1px solid var(--line);
+border-radius:14px;text-decoration:none;color:inherit}
+.card .d{font-size:.78em;color:var(--accent2);font-weight:600;letter-spacing:.04em}
+.card .t{font-size:1.03em;font-weight:600;margin:.35em 0 .2em;line-height:1.45}
+footer{margin-top:3em;padding-top:1.2em;border-top:1px solid var(--line);
+color:var(--muted);font-size:.82em;text-align:center}
+</style></head><body><div class="topbar"><a href="./index.html">← 返回目录</a></div><h1>第 1 天学习包 · 2026-10-31</h1>
+<hr>
+<h2>Part 1 英语 25 分钟</h2>
+<h3>1. 语音热身 3min：三个高频错音</h3>
+<p>密封系统岗位天天要说 <strong>durometer / seal / extrusion / tolerance</strong>，先把这三个坑填了。</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>错在哪</th>
+<th>中国学员典型读法</th>
+<th>正确读法</th>
+<th>最小对立练习</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/r/ 卷舌不到位</td>
+<td>rubber 读成 "lubber"</td>
+<td><strong>rubber</strong> /ˈrʌb.ər/ 舌尖不碰齿龈，舌身后缩</td>
+<td>rubber–lubber；right–light；road–load</td>
+</tr>
+<tr>
+<td>/θ/ 用 /s/ 替代</td>
+<td>thickness 读成 "sickness"</td>
+<td><strong>thickness</strong> /ˈθɪk.nəs/ 舌尖轻触上齿背、送气</td>
+<td>thickness–sickness；three–see；mouth–mouse</td>
+</tr>
+<tr>
+<td>词尾 /l/ 吞掉</td>
+<td>seal 读成 "sea"</td>
+<td><strong>seal</strong> /siːl/ 舌根抬起、舌尖抵齿龈收尾</td>
+<td>seal–sea；tool–too；control–contra</td>
+</tr>
+</tbody>
+</table></div>
+<p>练法：每组 5 遍，第二遍开始<strong>只练最小对立</strong>，不练单词。录音回放，用耳朵判自己。</p>
+<h3>2. 影子跟读 8min</h3>
+<p><strong>段一：晨会汇报（约 40 秒，正常语速）</strong></p>
+<blockquote>
+<p>Good morning, everyone. Quick update on the <strong>B-pillar</strong> /ˈbiː pɪl.ər/ <strong>weatherstrip</strong> /ˈweð.ər.strɪp/ program. We finished the <strong>durometer</strong> /dʊˈrɒm.ɪ.tər/ survey on the last three <strong>shot</strong> /ʃɒt/ samples. All readings sit between fifty-eight and sixty-two <strong>Shore A</strong> /ʃɔːr eɪ/, which is inside our <strong>spec window</strong> /spek ˈwɪn.doʊ/. The <strong>compression set</strong> /kəmˈpreʃ.ən set/ result is still open — we should have it by Thursday. Next step is the <strong>fixture</strong> /ˈfɪks.tʃər/ review with the customer on Monday.</p>
+</blockquote>
+<p>发音点：<br>
+- <strong>weatherstrip</strong> 里 /ð/ 要出声带振动，别读成 /d/。<br>
+- <strong>durometer</strong> 重音在第二音节 -rom-，不要读成 DU-ro-me-ter。<br>
+- <strong>inside our</strong> 连读 /ɪnˈsaɪ.daʊ.ər/，our 弱读成 /ər/。<br>
+- <strong>should have it</strong> 口语里读 /ˈʃʊ.də.vɪt/，have 弱化。<br>
+- 节奏：每句<strong>名词短语重读、介词短语轻带</strong>，句末降调表确定。</p>
+<p><strong>段二：客户电话（约 35 秒）</strong></p>
+<blockquote>
+<p>Thanks for calling back. I've got two concerns. First, the <strong>gloss</strong> /ɡlɒs/ level on the <strong>flange</strong> /flændʒ/ area looks <strong>inconsistent</strong> /ˌɪn.kənˈsɪs.tənt/ — some parts are noticeably <strong>shinier</strong> /ˈʃaɪ.ni.ər/ than the reference. Second, could you confirm the <strong>material grade</strong> /ˈmæ.tɪə.ri.əl ɡreɪd/? Our <strong>PPAP</strong> /piː.piː.eɪ.piː/ package needs the exact <strong>compound</strong> /ˈkɒm.paʊnd/ designation. If we can close both by Friday, we stay on schedule.</p>
+</blockquote>
+<p>发音点：<br>
+- <strong>I've got</strong> 连读 /aɪv ɡɒt/，v 要出声。<br>
+- <strong>looks inconsistent</strong> 的 /ks/ + /ɪn/ 中间不要加元音，读 /lʊks ɪn.kənˈsɪs.tənt/。<br>
+- <strong>could you</strong> 口语读 /ˈkʊ.dʒu/，d + y 腭化成 /dʒ/。<br>
+- <strong>PPAP</strong> 逐字母读，不要拼成单词。<br>
+- 节奏：<strong>First / Second</strong> 是信息锚点，前面稍停、后面加速。</p>
+<h3>3. 功能句 6 组 6min</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>直接版</th>
+<th>委婉版</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>要数据</td>
+<td>Send me the durometer data by 5 p.m.</td>
+<td>Could you share the durometer data when you get a chance? I'd like it before end of day if possible.</td>
+</tr>
+<tr>
+<td>指出问题</td>
+<td>This part is out of spec.</td>
+<td>I'm seeing readings that fall outside the spec window — can we look at this together?</td>
+</tr>
+<tr>
+<td>拒绝</td>
+<td>No, we can't hit that date.</td>
+<td>That date is tight for us. Let me come back to you with what's realistic.</td>
+</tr>
+<tr>
+<td>催进度</td>
+<td>Where is the report?</td>
+<td>Just checking in on the report — is there anything blocking you?</td>
+</tr>
+<tr>
+<td>承认不懂</td>
+<td>I don't know.</td>
+<td>I don't have that in front of me. Let me confirm and get back to you.</td>
+</tr>
+<tr>
+<td>提反对</td>
+<td>I disagree.</td>
+<td>I see it a bit differently — here's my concern.</td>
+</tr>
+</tbody>
+</table></div>
+<p>用法提醒：委婉版<strong>不是加 please 就完事</strong>，核心是「给对方留台阶 + 给出你的下一步」。直接版在内部技术讨论里反而更专业，别一律软。</p>
+<h3>4. 词汇 12 个 6min</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>词</th>
+<th>音标</th>
+<th>释义</th>
+<th>搭配</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>durometer</td>
+<td>/dʊˈrɒm.ɪ.tər/</td>
+<td>硬度计；硬度（口语）</td>
+<td>durometer reading / Shore A durometer</td>
+</tr>
+<tr>
+<td>hardness</td>
+<td>/ˈhɑːd.nəs/</td>
+<td>硬度</td>
+<td>hardness value / hardness tester</td>
+</tr>
+<tr>
+<td>Shore A</td>
+<td>/ʃɔːr eɪ/</td>
+<td>邵氏 A 标尺（软质橡胶）</td>
+<td>60 Shore A / Shore A 60±5</td>
+</tr>
+<tr>
+<td>IRHD</td>
+<td>/ˌaɪ.ɑːr.eɪtʃˈdiː/</td>
+<td>国际橡胶硬度（度）</td>
+<td>IRHD 60 / IRHD method</td>
+</tr>
+<tr>
+<td>indentation</td>
+<td>/ˌɪn.denˈteɪ.ʃən/</td>
+<td>压入；压痕</td>
+<td>indentation depth / indentation hardness</td>
+</tr>
+<tr>
+<td>specimen</td>
+<td>/ˈspes.ɪ.mən/</td>
+<td>试样</td>
+<td>test specimen / specimen thickness</td>
+</tr>
+<tr>
+<td>compression set</td>
+<td>/kəmˈpreʃ.ən set/</td>
+<td>压缩永久变形</td>
+<td>compression set at 70h/100°C</td>
+</tr>
+<tr>
+<td>tolerance</td>
+<td>/ˈtɒl.ər.əns/</td>
+<td>公差</td>
+<td>within tolerance / tight tolerance</td>
+</tr>
+<tr>
+<td>compound</td>
+<td>/ˈkɒm.paʊnd/</td>
+<td>胶料、混炼胶</td>
+<td>EPDM compound / compound batch</td>
+</tr>
+<tr>
+<td>extrusion</td>
+<td>/ɪkˈstruː.ʒən/</td>
+<td>挤出；挤出物</td>
+<td>extrusion line / extrusion profile</td>
+</tr>
+<tr>
+<td>weatherstrip</td>
+<td>/ˈweð.ər.strɪp/</td>
+<td>密封条</td>
+<td>door weatherstrip / glass run weatherstrip</td>
+</tr>
+<tr>
+<td>out of spec</td>
+<td>/aʊt əv spek/</td>
+<td>超差</td>
+<td>fall out of spec / bring back into spec</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>词根专栏：-meter / -metry（测量）</strong><br>
+duro-<strong>meter</strong>（硬度计）← durometer 来自 durable（耐久）+ -meter。同族：thermo<strong>meter</strong> 温度计、visco<strong>meter</strong> 粘度计、spec<strong>trometry</strong> 光谱法。记住后缀 <strong>-meter = 测量工具</strong>，<strong>-metry = 测量方法</strong>，开会时听到 "we need a different metrology" 就是「换测量手段」。</p>
+<h3>5. 场景对话 4min</h3>
+<p>A = 供应商质量工程师，B = 库博标准产品开发培训生</p>
+<blockquote>
+<p><strong>A:</strong> Can you walk me through the durometer results on the last shipment?<br>
+<strong>B:</strong> Sure. We tested five specimens per batch. Average came in at <strong>59 Shore A</strong>, well within the <strong>60±5</strong> window.<br>
+<strong>A:</strong> Any outliers?<br>
+<strong>B:</strong> One reading at 53 — that one was <strong>right at the edge of the specimen</strong>, so I'd <strong>flag it as a measurement artifact</strong> rather than a material issue.<br>
+<strong>A:</strong> Fair. What's your <strong>read</strong> on the compression set?<br>
+<strong>B:</strong> Still pending. <strong>My hunch is</strong> it'll pass, but I don't want to <strong>call it</strong> before the data's in.<br>
+<strong>A:</strong> Good. <strong>Let's touch base</strong> Thursday.</p>
+</blockquote>
+<p>地道表达：<strong>walk me through</strong>（带我过一遍）、<strong>right at the edge</strong>（正好在边缘）、<strong>flag it as</strong>（标记为）、<strong>my hunch is</strong>（我猜）、<strong>call it</strong>（下结论）、<strong>touch base</strong>（碰一下）。</p>
+<h3>6. 输出任务 2min</h3>
+<ol>
+<li>用手机录 <strong>60 秒</strong>自我介绍（英文），必须包含：姓名、岗位、当前跟的一个项目、一个你负责的具体参数（说 durometer 或 compression set）。录完回放，<strong>只挑一个音</strong>纠正重录一次。</li>
+<li>写 <strong>3 个句子</strong>发到学习群：① 用委婉版要一次数据；② 用 "I'm seeing readings that…" 描述一个超差；③ 用 "Let me confirm and get back to you" 收尾一个你答不上来的问题。</li>
+</ol>
+<hr>
+<h2>Part 2 产品专题 25 分钟：硬度 durometer 全解</h2>
+<h3>1. 一句话定义与图纸位置</h3>
+<p><strong>硬度（hardness / durometer）</strong> 是橡胶抵抗压头压入的能力，工程上用邵氏 A（Shore A）或 IRHD 表示，是一个<strong>无量纲但分标尺</strong>的相对量。在图纸上它不写在尺寸链里，而是写在<strong>材料标注行</strong>：<code>EPDM, 60±5 Shore A, per ASTM D2240</code>，紧挨着材料代号和标准号，和拉伸强度、压缩永久变形并列在材料规格块（material spec block）里。</p>
+<h3>2. 怎么测</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>标准</td>
+<td>ASTM D2240（邵氏）；ISO 48-4 / GB/T 531.1（IRHD 与邵氏 A 互通）；ISO 7619-1</td>
+</tr>
+<tr>
+<td>设备</td>
+<td>邵氏 A 硬度计，弹簧加载</td>
+</tr>
+<tr>
+<td>压头几何</td>
+<td>截头圆锥，端面直径 <strong>0.79 mm</strong>，锥角 35°，压足孔径 3 mm</td>
+</tr>
+<tr>
+<td>试样</td>
+<td>厚度 <strong>≥6 mm</strong>（薄件可叠层，最多 3 层，叠层结果不可直接对标单层）；表面平整、无气孔</td>
+</tr>
+<tr>
+<td>环境</td>
+<td>标准实验室 <strong>23±2 °C、50±5 %RH</strong>；试样状态调节 ≥1 h（薄件 3 h）</td>
+</tr>
+<tr>
+<td>读数方式</td>
+<td>压足贴紧试样，1 s 内读数（瞬时值）或 <strong>15 s 后读数</strong>（延时值），<strong>必须在报告里写明用哪个</strong></td>
+</tr>
+<tr>
+<td>取值规则</td>
+<td>每点间隔 ≥6 mm、距边缘 ≥12 mm；<strong>5 点取中位数</strong>（不是平均值），极差超 5 度要复测</td>
+</tr>
+</tbody>
+</table></div>
+<p>关键点：<strong>1 s 与 15 s 的差值本身就是粘弹性信息</strong>，同一批料两者差 3–5 度很正常，混用会误判。</p>
+<h3>3. 标尺对比</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>标尺</th>
+<th>适用材料</th>
+<th>典型量程</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shore A</td>
+<td>软质橡胶、TPE、密封条</td>
+<td>20–90</td>
+<td>密封系统主用</td>
+</tr>
+<tr>
+<td>Shore D</td>
+<td>硬塑料、硬橡胶</td>
+<td>40–90</td>
+<td>A&gt;90 时改用 D</td>
+</tr>
+<tr>
+<td>Shore 00</td>
+<td>超软凝胶、发泡</td>
+<td>0–100</td>
+<td>低密度海绵</td>
+</tr>
+<tr>
+<td>IRHD</td>
+<td>橡胶（国际通用）</td>
+<td>30–95</td>
+<td>与 Shore A 在中等硬度近似，两端偏差大</td>
+</tr>
+<tr>
+<td>邵氏 A ↔ D</td>
+<td>—</td>
+<td>A90 ≈ D40</td>
+<td>仅近似换算，不可当精确公式</td>
+</tr>
+</tbody>
+</table></div>
+<h3>4. 典型值表（工程参考，非规范）</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>部位</th>
+<th>材料</th>
+<th>典型 Shore A</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>车门密封条密实胶（dense）</td>
+<td>EPDM</td>
+<td>65–75</td>
+</tr>
+<tr>
+<td>车门密封条海绵胶（sponge）</td>
+<td>EPDM 发泡</td>
+<td>25–40（或按密度控制）</td>
+</tr>
+<tr>
+<td>玻璃导槽（glass run）唇口</td>
+<td>EPDM / TPE</td>
+<td>60–70</td>
+</tr>
+<tr>
+<td>内饰软触条</td>
+<td>TPV</td>
+<td>55–70</td>
+</tr>
+<tr>
+<td>静态密封 O 圈</td>
+<td>NBR / FKM</td>
+<td>70–80</td>
+</tr>
+<tr>
+<td>低摩擦涂层区</td>
+<td>涂层</td>
+<td>不测硬度，测摩擦系数</td>
+</tr>
+</tbody>
+</table></div>
+<h3>5. 硬度升降的连锁影响</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>变化</th>
+<th>性能影响</th>
+<th>后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>硬度↑</td>
+<td>压缩负荷（CLD）↑、抗挤出↑</td>
+<td>关门力变大、装配困难、异响风险↑</td>
+</tr>
+<tr>
+<td>硬度↑</td>
+<td>回弹与尺寸稳定性↑</td>
+<td>但低温变硬更明显，冷天密封失效</td>
+</tr>
+<tr>
+<td>硬度↓</td>
+<td>贴合性↑、密封接触更充分</td>
+<td>压缩永久变形↑、长期塌陷、漏水风险</td>
+</tr>
+<tr>
+<td>硬度↓</td>
+<td>装配力↓</td>
+<td>但抗撕裂↓、挤出/咬边风险↑</td>
+</tr>
+<tr>
+<td>硬度波动大</td>
+<td>批次一致性差</td>
+<td>客户产线装配参数无法固化，投诉</td>
+</tr>
+</tbody>
+</table></div>
+<p>一句话：<strong>硬度是「密封力」和「装配力」之间的杠杆</strong>，不是越高越好。</p>
+<h3>6. 配方与设计杠杆</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>杠杆</th>
+<th>方向</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>炭黑填充量</td>
+<td>↑填充 → 硬度↑</td>
+<td>最直接的调节手段，但影响伸长率</td>
+</tr>
+<tr>
+<td>增塑剂/油</td>
+<td>↑油 → 硬度↓</td>
+<td>过量会析出、污染、老化变硬</td>
+</tr>
+<tr>
+<td>生胶门尼粘度</td>
+<td>↑门尼 → 硬度略↑</td>
+<td>影响挤出表面质量</td>
+</tr>
+<tr>
+<td>硫化密度</td>
+<td>↑交联 → 硬度↑、压缩永久变形↓</td>
+<td>过硫变脆</td>
+</tr>
+<tr>
+<td>发泡倍率</td>
+<td>↑发泡 → 海绵硬度↓</td>
+<td>海绵条主要看密度而非 Shore A</td>
+</tr>
+<tr>
+<td>截面设计</td>
+<td>唇口减薄/加空腔</td>
+<td>用几何替代硬度调 CLD，是设计端首选</td>
+</tr>
+</tbody>
+</table></div>
+<h3>7. 温度/时间/老化漂移</h3>
+<ul>
+<li><strong>低温</strong>：橡胶进入玻璃化过渡，硬度显著上升，-30 °C 下 Shore A 可涨 10–20 度——这是冬季密封条变硬、关门费力的物理原因。</li>
+<li><strong>高温老化</strong>：交联继续或降解，短期变硬、长期变软，方向取决于胶种。</li>
+<li><strong>压缩永久变形</strong>：长期受压部位硬度不降但<strong>有效密封力下降</strong>，这是"硬度合格但漏"的典型。</li>
+<li><strong>增塑剂迁移</strong>：随时间流失 → 变硬、收缩 → 尺寸与密封双失效。</li>
+<li>结论：<strong>室温单点硬度不能代表全生命周期</strong>，必须配低温硬度、热老化后硬度变化（Δ硬度）一起看。</li>
+</ul>
+<h3>8. 图纸与规范怎么写</h3>
+<pre><code>MATERIAL: EPDM, dense
+HARDNESS: 65 ± 5 Shore A
+TEST METHOD: ASTM D2240, 15 s reading, 6 mm min. thickness
+SPECIMEN: 5 points, median reported, range ≤ 5
+AGING: Δ hardness ≤ +10 Shore A after 70 h @ 100 °C (ASTM D573)
+LOW TEMP: hardness increase ≤ 15 Shore A @ -30 °C (ASTM D2240)
+NOTE: sponge sections controlled by density, not Shore A
+</code></pre>
+<p>写法要点：<strong>标尺 + 数值 + 公差 + 标准号 + 读数方式 + 试样条件 + 老化要求</strong>，缺一项就是可争议项。</p>
+<h3>9. 测量与应用陷阱</h3>
+<ol>
+<li><strong>薄件直接测</strong>：厚度不足 6 mm 不叠层，读数虚高。</li>
+<li><strong>1 s / 15 s 混用</strong>：供应商报 1 s、客户验 15 s，差 3–5 度就吵起来。</li>
+<li><strong>取平均值而非中位数</strong>：一个气泡点拉低均值，误判整批。</li>
+<li><strong>在海绵条上测 Shore A</strong>：海绵应控密度，硬测 Shore A 数据无意义。</li>
+<li><strong>边缘/圆角处测</strong>：压足悬空，读数偏低。</li>
+<li><strong>只测室温</strong>：忽略低温硬化，冬季现场失效。</li>
+</ol>
+<h3>10. 延伸到当前产品方向</h3>
+<p>库博标准公开产品线里，<strong>Fortrex</strong> 是轻量化密封材料体系，<strong>FlexiFit</strong> 侧重装配与贴合性，<strong>FlexiCore</strong> 涉及密封条结构/芯部设计。三者的共同逻辑是：<strong>用材料与截面设计去解耦"密封力 vs 装配力"的矛盾</strong>——这正是硬度杠杆的核心。做 Fortrex 类轻量化方案时，硬度往往不是单点指标，而是和密度、压缩负荷（CLD）、低温硬度一起构成一组"密封性能包"。培训生阶段要建立的直觉是：<strong>看到硬度规格，先问它服务于哪个性能目标</strong>（密封？装配？NVH？耐久？），再判断公差是否合理。</p>
+<h3>自测 5 题</h3>
+<ol>
+<li>Shore A 压头端面直径是多少？试样最小厚度？</li>
+<li>为什么报告必须写明 1 s 还是 15 s 读数？</li>
+<li>硬度升高对关门力和密封性分别是什么影响？</li>
+<li>海绵密封条为什么不用 Shore A 控制？</li>
+<li>图纸上硬度标注最少要包含哪几项？</li>
+</ol>
+<h3>参考答案</h3>
+<ol>
+<li>端面直径 0.79 mm；试样厚度 ≥6 mm（薄件可叠层，最多 3 层）。</li>
+<li>因为橡胶是粘弹性材料，1 s 与 15 s 读数可差 3–5 度，不写明则供需双方数据不可比、易争议。</li>
+<li>硬度↑ → 压缩负荷↑ → 关门力变大、装配困难；同时抗挤出↑但贴合性下降，低温硬化更明显，密封反而可能变差。</li>
+<li>海绵是发泡结构，Shore A 压头会压穿泡孔，读数无物理意义；应控制密度与压缩负荷。</li>
+<li>标尺、数值与公差、测试标准号、读数方式（1 s/15 s）、试样厚度/叠层规则、取值规则（中位数/极差），以及老化与低温要求。</li>
+</ol>
+<hr>
+<h2>Part 3 新闻 + 我的理解 10 分钟</h2>
+<blockquote>
+<p>以下「事实」仅来自今日素材标题，链接保留；「我的理解」是我的判断，不是新闻内容。</p>
+</blockquote>
+<h3>世界</h3>
+<p><strong>事实</strong><br>
+- 外交部：中方对中东地区局势持续紧张深表关切 — 新华网｜https://news.google.com/rss/articles/CBMif0FVX3lxTE5aNVY0dVFuNTYxT25BazNvMGdSZGQ3SzdnaXIxalcxLWFKV3ZsSTMweTg1ODFscnpGdlhvcUE0ekZZOU5PRkZfNkZMQkxMeUdkTklDTERaN0g2cWN2eDJFcDM4d3R6dU8tNzU5cENadGswb2dyNmZJSnYzVHl4QjQ?oc=5<br>
+- 外交部：高度关注中东海湾和红海、非洲之角地区局势变化 — 习近平外交思想和新时代中国外交｜https://news.google.com/rss/articles/CBMidkFVX3lxTFBJVm4zMzZMMnJaeG5mNUVCNjdpUWdKNGtuNUNhcUNYRF9QLXFzaVV5bi1XeWhMZlc5dHdZVDV0ajVjWVJkdUZITEpXbDYyNVhYMTBZdGl4OFFQWmoxR0k0b0RNODNPLUEzTkVEd1I1UDNJN3VFZlE?oc=5<br>
+- 特朗普称美伊战争将很快结束 中东局势再临关键窗口 — 财联社｜https://news.google.com/rss/articles/CBMiSEFVX3lxTFBKaFZOZTY5S0V4U0tPaHBaaUVRdlVibm11ZDBHNmY1STZJUGVBd3lsSWxfMGhoMDc5MmVacTl6VVRuLUp3ZEFsUg?oc=5<br>
+- 中国玉兰发行模式离岸债落地中东 — 人民日报｜https://news.google.com/rss/articles/CBMif0FVX3lxTE8zajhxNU5ncllNbjZjeFREMXZoTHRKMmk1d1FndnJLWF9HWlFsTm5ReFZQNlRYMThVb292Nk01UGliRHJiMkJGbGZibDA1bFpySjd5OWNzOXdUNkktSW9IbVNxUTZTS1ZNd2xyUFc5NURqZHI0WHB0RDVWNXZiSmM?oc=5<br>
+- 达弥中东律师事务所管理合伙人：中东发展需求与中国企业优势高度契合 — 中国新闻网｜https://news.google.com/rss/articles/CBMiaEFVX3lxTFBvSTVHNG8ydkdaSnc0RlV5eHZBN0ZPQjBuU09CV29pUzJZemR3TWI5bmNsaFphQXRiNzhUX1FpNk1uQ25kOFFsa3o4UjVQTmRMQnc3RjlXRVJjS3M2TktBWm4zb0ZpT0kx?oc=5<br>
+- 伊朗被指密谋袭击美官员，美悄悄从中东多国撤人，特朗普：也许25日动武 — 上观新闻｜https://news.google.com/rss/articles/CBMiWkFVX3lxTE5raWdlNk9uUExSOENhSUxKazl4VFBicG9IU3F6Wkc5UTE4czlWOHY2eTBHVk9KZ25YTjVrb1JBbjE3STY3eUJPdWt2aS1MS2JCUGQ1c2ZDaUxlZw?oc=5</p>
+<p><strong>我的理解（判断，非新闻）</strong>：同一批标题里同时出现「深表关切」「关键窗口」「撤人」「离岸债落地」，说明市场把地缘风险与商业机会分开定价——风险在短期，机会在中长期。二阶影响：中东局势若降温，航运与保险成本先回落；若升级，能源与运费先动。该盯：布伦特原油、红海航线运价、离岸债发行节奏。</p>
+<h3>中国</h3>
+<p><strong>事实</strong><br>
+- 中国经济重蹈日本"失落年代"覆辙？专家：举债放水，还财于民才能脱困 — 美国之音｜https://news.google.com/rss/articles/CBMihgFBVV95cUxPOWExNHoxVzQ0c0s4VVpqSDJaWE9vTjlBMmx6aV91WmxNVVZXSDRsOVZpczY2eG5hMy1FWHY3Q003dHBhZjRDMWVNMjIxYVA4Q29Kb0ttUTUxaXdxTURjZHhaaTRKdDJxUndyVzRMSy1mbGxTcGlPMVpUcm9IbF9MaVF2MTlGUdIBiAFBVV95cUxPYm1OTXpXQzhYb3VqYTVUbnNnUHZ5OE1zU3hGM1RHbnNxNGdEcUFXb0FCNF9XMHZ6bkoxSnBaLVhuZkNCMmZVekhKdld6RUdFQkxsckNFblM2NURKbW0yMmFUTEtpaW5uNG4zcXBFTDVpMmE5cUcyWDZjcHl6M2RxeHVWYmN6SGlr?oc=5<br>
+- 蓝海、绿能齐发力 多领域见证中国经济活力 — 经济频道｜https://news.google.com/rss/articles/CBMie0FVX3lxTFBxSzF5T1RJOFFrQ0l5THhZXzFaVWRfMWh1NW1Fck9GblBhd3pUZUpKS2FvSHFJc1VrdDZkaXpEYmNvU2RVb1p4alZkOFdtT3AyR195N3BDMG41TG52NjFpTFdwTlMtbm9xOXFRYThVNDYwLXpWUHVscHo0RQ?oc=5<br>
+- 蓝海、绿能齐发力多领域见证中国经济活力 — 中国日报网｜https://news.google.com/rss/articles/CBMigAFBVV95cUxNcFdRVjRIeVFkRk9rM0RZaUo1TzNNM0JMaGgtZndJY215ZHA0cUJlLTFoc3ViSkhrZVVZYXRqaHNjajBZa1poam9hNlFxeENqTXRjR213dWU1VTV0TzJ0QTBMLVA3OWtYeExoczdXSEc2TVNXSXVIRkxHVEpmTEpRSw?oc=5<br>
+- 想不到的中国经济丨这双手，太不寻常了！ — 中国青年网｜https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9jNjljX0pqQVpSM3NPbFNxbXhHbzdNaWZTQnVJdGczcXFHWTNlTk14N0I5bW9JV2dTd2VmSm82bU1uZnlSbDl4ZzhUV29PNzJsTnBWV1M2MEhyZzluZHVfZ2EzODFRYjQ?oc=5<br>
+- 蓝海、绿能齐发力 多领域见证中国经济活力 — 21财经｜https://news.google.com/rss/articles/CBMijwFBVV95cUxQMXVFR2NTT0pvN0pad2p6d21TNXpOdW5vRWZZYkJzcmRaSE81N2dMd2w0V28tSUtjWEF6bUJFNVlxS2NKaGlNNkczdmJmRy1ZOGdzUHVKaU9oUWl3Q3BCQTV3bzMtN21kdVNkM0hmeHZZMFJLbFJDcUI1SVVXc3UwVVlWVGdUekx0bFNtT0ZuQQ?oc=5<br>
+- 毛振华：宏观政策需要寻找新平衡 — 财新｜https://news.google.com/rss/articles/CBMiYkFVX3lxTE1saUdSWHZhTG5leXYzX29BZWJ5elFMN24wM0hRMWk2Q21tMVpwa0Q4U2owUmZwQ0JqY3JHd0s4TjNLbXo0ZWE3el9VVUNWaXlMZllhaDRucWdmanBKaURZZ3Vn?oc=5</p>
+<p><strong>我的理解（判断，非新闻）</strong>：一边是「失落年代」式质疑与「政策找新平衡」，一边是多家媒体同题报道「蓝海、绿能」。这不是矛盾，而是<strong>结构性分化</strong>：总量承压、增量在绿色与高端制造。二阶影响：财政与信贷会继续向绿能、装备制造倾斜，传统地产链继续寻底。该盯：绿色产业投资增速、社融结构、政策措辞里"平衡"的具体落点。</p>
+<h3>汽车行业</h3>
+<p><strong>事实</strong><br>
+- "汽"势何来？广西新能源汽车的下一程，藏在三个细节里 — 广西新闻网｜https://news.google.com/rss/articles/CBMif0FVX3lxTFAyQkE3czh6M1pmdkFtQmJkZWxpSGZMbXpGUnY3LUlwUk00ZHdNNEdUaTVvc2VMYlk0Z0gtVUI2YlVkOFlYVjZYVWU1NVBUOFNYc1ZGNXVDS1pfLTBSaXZ3c3hlNXVxNGdvUk5HS2pES2pmdjBaSW5vRXZpUWoxSGM?oc=5<br>
+- 新能源化促高质量出海 汽车行业三季报迎新增长极 — 上海证券报｜https://news.google.com/rss/articles/CBMibkFVX3lxTE53Nnd4cWx6RmhmeWdHVVJmTHRDSENGZlZJYldLZTJTUWtjcEtMelhWckhhTXRvUlJLQUdIZTA3aGphOGRRV3NfUkxSYjFINGlnUE9IYVdWcXotdkpsZmFOLUZpU1puNWF3bGNXSXVR?oc=5<br>
+- 2025年我国新能源乘用车渗透率达54%，十家车企销量超百万 — 汽车之家｜https://news.google.com/rss/articles/CBMiXkFVX3lxTE5KdExVWGFoM2VoTC0zU1E4bzZWSzAyczA0NGl0RWJqa3N0MHZTMUw0ZVVldTRoOFl6TGVobDRPNlBTVUxuSE1FY2VMT0djck96TlN0RjdMUXNuNWJfc3c?oc=5<br>
+- 2026年9月乘用车市场：内需显著收缩出口高增，内冷外热 — 电子工程专辑｜https://news.google.com/rss/articles/CBMiU0FVX3lxTE5tQVV2enFzVmtuX01CWnZxR0dDMnZLUEswdGRxa2tBVUdHM1h6RFlDOEtHVHZmY19EUWZkVFczSWhrUjRSWk9Gb3pnaXpxbE94YWM4?oc=5<br>
+- 比亚迪员工总数突破102万，其中研发工程师12万名 — 手机新浪网｜https://news.google.com/rss/articles/CBMifkFVX3lxTE1EMHJVc3hGaUFVUDdZYW1YTXVFOUJxMW0wT2d2M3pqUTM4ZGJKTGJ0d1B1dDRIdDgycXJuMU10Z09YN3dncDFxemtkdnNvNVEwTWFfN21rT2VKVWo0a291WmVfUDRvM1dVcFlPX0hZZGRIZ1E2b1ZZR3JXWjctUQ?oc=5<br>
+- 谁动了宁德时代和比亚迪的"奶酪" — 汽车公社｜https://news.google.com/rss/articles/CBMihAFBVV95cUxQVEFLVlo5OGtzZm03YXI1N0FsdF9IejBfRlZEYnJOUF9EOUlkRmtDenJRdG83bjBUR3VVUEd2NWY5M2pBMFd0c3VMQnlJTXJRblZxcDRpMXF3MUE4eE5VZTkzdV90ZGhaemEtVFdnU3BGaFVWcmhTaGxvd2dzYmxkeHBITGQ?oc=5</p>
+<p><strong>我的理解（判断，非新闻）</strong>：渗透率 54% 与「内冷外热」并存，说明国内进入<strong>存量替换 + 出口拉动</strong>阶段。对密封系统意味着两件事：① 出口车型要满足多地区标准（材料、VOC、低温性能），硬度与老化规格不能只按国内写；② 内需收缩下主机厂压价，供应商要靠<strong>平台化与轻量化</strong>（Fortrex 类思路）保毛利。该盯：出口月度增速、新能源渗透率拐点、主机厂年降幅度。</p>
+<h3>经济与市场</h3>
+<p><strong>事实</strong><br>
+- 财报不达标就遭猛烈抛售！华尔街掀起严厉"业绩审判" — 财联社｜https://news.google.com/rss/articles/CBMiSEFVX3lxTE9pQ2pOQnFaNnNYbUUtSXFfRXY4TVFnUGNhTmtWVjVNTll6dk5kZGJoeXFKTm5EWEx2T0YwLVVtUHVLZzNXOUJMOQ?oc=5<br>
+- 美股医疗板块创下历史新高 — 新浪财经｜https://news.google.com/rss/articles/CBMihwFBVV95cUxNeUJYV0xKUFhGSXFxYUJxRU5vS3piVEJEa0xYcFpjOFlrZUdEcW5mS1JJaGxzSWFieHdIZGlHU29wYzlSMWFHWXgyaHZFWkJTRUd1WXJSNE5uVWM1RG1UcXFrTzZ3OTc4eHVHN24xczlTQmVJRzZYa3FROXNUU192c3BsLXhCM00?oc=5<br>
+- 刚刚全线跳水！英特尔、亚马逊财报双双不及预期 — 东方财富｜https://news.google.com/rss/articles/CBMiYEFVX3lxTFBCSDlyT0QzNklkVXFMQUoyb0pqekUwdlBZVmwxMFdPUWptNEswYmNQOGF6bE1MLXZNdGllOXZiVWdpOW1rXzJMSzJwZ1RoM21pUUJZRm92YjhvSW40S0Q5Rg?oc=5<br>
+- 透视A股三季报：AI算力领跑，材料量价齐升，地产和消费寻底｜看财报 — 钛媒体｜https://news.google.com/rss/articles/CBMiTEFVX3lxTE5DeGlCcER5Y0lla3JOa2dHQkVUdlBxS1ExVGpncURzT2tsVkdJa1dIb01SbDVObmM2VXp1ZDlfZ0pzb3VXblotM29FdlE?oc=5<br>
+- 微软花式挑战历史新高 美股"三连涨"后面临严峻考验 — 财联社｜https://news.google.com/rss/articles/CBMiSEFVX3lxTE81cVBLMVAxNHdETko2bm5VZmZjNFN4VGxfd3RJeFhvSGVxN2tKUTZfclp5U0FtcmxfSlJlVm1RaVVKNmFERm1ZSw?oc=5<br>
+- 多赚3900亿！A股三季报全榜单来了 — 东方财富｜https://news.google.com/rss/articles/CBMiYEFVX3lxTE9zZ3pLclFVZ3pKZW03REFQemc2U1RaSHhnV09OeEZXelo5U0thT3g4X0IyUGRodGFpbmN6T1IzV0JqRUJyUmx4amVrYWtycDhBVk1WM2dEUElvbGFMWVdPMw?oc=5</p>
+<p><strong>行情快照</strong>：上证 3,599.</p></body></html>
