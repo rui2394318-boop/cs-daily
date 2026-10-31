@@ -172,12 +172,16 @@ def build_lesson_prompt(day_no: int, date: dt.date, en_focus: str, product_topic
 
 
 def build_news_prompt(day_no: int, date: dt.date, product_topic: str,
-                      news: dict[str, list[str]], quotes: list[str]) -> str:
+                      news: dict[str, list[str]], quotes: list[str],
+                      compact: bool = False) -> str:
+    per = 4 if compact else 6
     blocks = []
     for k, v in news.items():
-        blocks.append(f"### {k}\n" + ("\n".join(v) if v else "- 未获取到"))
+        picked = v[:per] if v else []
+        blocks.append(f"### {k}\n" + ("\n".join(picked) if picked else "- 未获取到"))
     news_text = "\n\n".join(blocks)
     quote_text = "、".join(quotes) if quotes else "未获取到"
+    length = "1500–1800 字" if compact else "1800–2400 字"
 
     return f"""今天是 {date:%Y-%m-%d}，第 {day_no} 天。今天的专业主题是「{product_topic}」。
 
@@ -191,23 +195,24 @@ def build_news_prompt(day_no: int, date: dt.date, product_topic: str,
 
 # 输出要求
 
-## Part 3 新闻 + 我的理解 15 分钟
+第一行必须是：`## Part 3 新闻 + 我的理解 15 分钟`
 
-先写 **## 今日主线**：3–4 条，把今天最值得注意的事串成一条逻辑线（不是罗列）。
+接着按顺序写：
 
-然后按「世界 / 中国 / 汽车行业 / 密封与零部件 / 经济与市场」五块分别写：
-- **事实**：尽量用满素材里的标题（每块 5–8 条），格式 `- 标题（来源）｜链接`，不要改写事实。
-- **我的理解**：这一段要比事实更长、更实。必须包含：
-  ① 因果链（为什么会这样）；
-  ② 二阶影响（接下来会传导到哪里，谁受损谁受益）；
-  ③ 该盯的指标（具体到可查的数字或事件）。
-  明确标注「这是我的判断，不是新闻内容」。
+### 今日主线
+3–4 条，把今天最值得注意的事串成一条逻辑线（不是罗列）。
 
-## Part 4 收尾
-- 「今天记住三句话」：一条关于产品、一条关于行业、一条关于市场。
-- 「对你的实操含义」：3–4 条，连到密封系统产品开发岗位的日常工作。
+### 世界 / ### 中国 / ### 汽车行业 / ### 密封与零部件 / ### 经济与市场
+每块两段：
+- **事实**：用满素材里的标题，每条只占一行，格式 `- 标题（来源）｜链接`，**不要写日期，不要改写事实**。
+- **我的理解**：比事实更长更实，必须含 ① 因果链 ② 二阶影响（传导到谁、谁受损谁受益）③ 该盯的指标（具体到可查的数字或事件）。标注「这是我的判断，不是新闻内容」。
 
-长度：正文 2200–2800 字。事实部分保留链接；解读部分不要复读标题。"""
+### Part 4 收尾
+必须写完整，不能省略：
+- 「今天记住三句话」：产品、行业、市场各一条。
+- 「对你的实操含义」：3–4 条，连到密封系统产品开发岗位。
+
+长度：正文 {length}。宁可少写两条新闻，也必须把 Part 4 写完。"""
 
 
 def call_llm(prompt: str, system: str, max_tokens: int) -> str:
@@ -382,7 +387,13 @@ def main() -> None:
                       SYSTEM_LESSON, 8192)
     print("[gen] 新闻与解读")
     bulletin = call_llm(build_news_prompt(day_no, today, product_topic, news, quotes),
-                        SYSTEM_NEWS, 6000)
+                        SYSTEM_NEWS, 8192)
+    if "记住三句话" not in bulletin:  # 兜底：输出被截断就压缩重试一次
+        print("[retry] 新闻输出不完整，用精简模式重试", file=sys.stderr)
+        bulletin = call_llm(
+            build_news_prompt(day_no, today, product_topic, news, quotes, compact=True),
+            SYSTEM_NEWS, 8192,
+        )
     md_text = lesson.rstrip() + "\n\n---\n\n" + bulletin.lstrip()
 
     DOCS.mkdir(exist_ok=True)
