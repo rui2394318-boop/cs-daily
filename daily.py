@@ -204,7 +204,8 @@ def build_news_prompt(day_no: int, date: dt.date, product_topic: str,
 
 ### 世界 / ### 中国 / ### 汽车行业 / ### 密封与零部件 / ### 经济与市场
 每块两段：
-- **事实**：用满素材里的标题，每条只占一行，格式 `- 标题（来源）｜链接`，**不要写日期，不要改写事实**。
+- **事实**：用满素材里的标题，每条只占一行，格式 `- 标题 — [来源](链接)`。
+  **链接必须写成 Markdown 链接，绝对不要把网址明文写在正文里**；不要写日期，不要改写事实。
 - **我的理解**：比事实更长更实，必须含 ① 因果链 ② 二阶影响（传导到谁、谁受损谁受益）③ 该盯的指标（具体到可查的数字或事件）。标注「这是我的判断，不是新闻内容」。
 
 ### Part 4 收尾
@@ -240,6 +241,27 @@ def call_llm(prompt: str, system: str, max_tokens: int) -> str:
     if choice.get("finish_reason") == "length":
         print("[warn] 输出达到 max_tokens，可能被截断", file=sys.stderr)
     return text
+
+
+def compact_links(md: str) -> str:
+    """把正文里的裸网址收成 Markdown 链接。
+
+    手机上一条 150 字符的 Google 跳转链接会占五六行，正文完全没法读，
+    所以统一转成「[来源](url)」，只显示几个字。
+    """
+    # 1) 标题（来源）｜https://...  →  标题 — [来源](https://...)
+    md = re.sub(
+        r"（([^）]{1,24})）\s*[｜|]\s*(https?://[^\s）]+)",
+        lambda m: f" — [{m.group(1)}]({m.group(2)})",
+        md,
+    )
+    # 2) 残留的 ｜https://...  →  — [原文](https://...)
+    md = re.sub(
+        r"\s*[｜|]\s*(https?://[^\s）]+)",
+        lambda m: f" — [原文]({m.group(1)})",
+        md,
+    )
+    return md
 
 
 # ---------------------------------------------------------------- 渲染
@@ -399,7 +421,7 @@ def main() -> None:
             build_news_prompt(day_no, today, product_topic, news, quotes, compact=True),
             SYSTEM_NEWS, 8192,
         )
-    md_text = lesson.rstrip() + "\n\n---\n\n" + bulletin.lstrip()
+    md_text = compact_links(lesson.rstrip() + "\n\n---\n\n" + bulletin.lstrip())
 
     DOCS.mkdir(exist_ok=True)
     stem = f"{today:%Y-%m-%d}-Day{day_no:02d}"
