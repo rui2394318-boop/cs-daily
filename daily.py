@@ -367,7 +367,12 @@ def site_url() -> str:
 
 
 def main() -> None:
-    today = dt.datetime.now(CST).date()
+    forced = os.environ.get("FORCE_DATE", "").strip()
+    if forced:
+        today = dt.date.fromisoformat(forced)
+        print(f"[gen] 补发模式：{today}")
+    else:
+        today = dt.datetime.now(CST).date()
     day_no = (today - START_DATE).days + 1
     if day_no < 1:
         day_no = 1
