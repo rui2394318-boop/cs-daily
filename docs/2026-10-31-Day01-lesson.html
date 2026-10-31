@@ -1,0 +1,508 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16181a" media="(prefers-color-scheme: dark)">
+<title>Day 01 · 2026-10-31｜硬度 durometer 全解</title><style>
+:root{--bg:#fbfaf7;--fg:#1c1b19;--muted:#6b6862;--line:#e2ded6;--card:#fff;
+--accent:#0a6b5f;--accent2:#b4531a;--code:#f2efe9}
+@media (prefers-color-scheme:dark){:root{--bg:#16181a;--fg:#e8e6e1;--muted:#9a968e;
+--line:#2c2f33;--card:#1e2124;--accent:#5fd3bd;--accent2:#e6a06a;--code:#24282c}}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0 auto;background:var(--bg);color:var(--fg);max-width:760px;
+font:17px/1.78 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+padding:20px 18px 72px;word-break:break-word;overflow-wrap:anywhere}
+h1{font-size:1.6em;line-height:1.35;margin:.2em 0 .8em}
+h1::after{content:"";display:block;width:46px;height:3px;margin-top:.5em;
+background:var(--accent);border-radius:2px}
+h2{font-size:1.26em;margin:2em 0 .6em;padding-top:.9em;border-top:1px solid var(--line)}
+h3{font-size:1.08em;margin:1.6em 0 .5em;color:var(--accent)}
+p{margin:.75em 0}a{color:var(--accent)}
+blockquote{margin:1em 0;padding:.7em 1em;border-left:3px solid var(--accent2);
+background:var(--card);border-radius:0 8px 8px 0;color:var(--muted)}
+ul,ol{padding-left:1.35em}li{margin:.36em 0}
+code{background:var(--code);padding:.14em .38em;border-radius:5px;
+font:.88em/1.5 ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--code);padding:14px 16px;border-radius:10px;overflow-x:auto;font-size:.86em}
+pre code{background:none;padding:0}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.1em -18px;padding:0 18px}
+table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:var(--code);font-weight:650;white-space:nowrap}
+.topbar{position:sticky;top:0;z-index:9;margin:-20px -18px 18px;padding:11px 18px;
+background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);
+border-bottom:1px solid var(--line);font-size:.92em}
+.topbar a{text-decoration:none;font-weight:600}
+.sec{margin:2.2em 0 .6em;font-size:.8em;letter-spacing:.08em;text-transform:uppercase;
+color:var(--muted);font-weight:700}
+.cards{display:grid;gap:12px;margin:.6em 0 1.4em}
+.card{display:block;padding:16px 18px;background:var(--card);border:1px solid var(--line);
+border-radius:14px;text-decoration:none;color:inherit}
+.card .d{font-size:.78em;color:var(--accent2);font-weight:600;letter-spacing:.04em}
+.card .t{font-size:1.03em;font-weight:600;margin:.35em 0 .2em;line-height:1.45}
+footer{margin-top:3em;padding-top:1.2em;border-top:1px solid var(--line);
+color:var(--muted);font-size:.82em;text-align:center}
+</style></head><body><div class="topbar"><a href="./index.html">← 返回目录</a></div><h2>Part 1 英语 25 分钟</h2>
+<h3>1. 语音热身 3min：三个高频错音</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>错在哪</th>
+<th>典型读法（错）</th>
+<th>正确读法</th>
+<th>最小对立（minimal pair）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/θ/ 读成 /s/ 或 /f/</td>
+<td><em>think</em> → "sink"；<em>three</em> → "free"</td>
+<td>舌尖轻触上齿背、送气不振动声带：/θɪŋk/、/θriː/</td>
+<td>think /θɪŋk/ – sink /sɪŋk/；three /θriː/ – free /friː/</td>
+</tr>
+<tr>
+<td>/v/ 读成 /w/</td>
+<td><em>very</em> → "wery"；<em>valve</em> → "walve"</td>
+<td>上齿轻咬下唇、声带振动：/ˈveri/、/vælv/</td>
+<td>very /ˈveri/ – wary /ˈweəri/；vest /vest/ – west /west/</td>
+</tr>
+<tr>
+<td>词尾 /l/ 吞掉或读成 /o/</td>
+<td><em>seal</em> → "seo"；<em>tool</em> → "too"</td>
+<td>舌尖抵上齿龈、舌后部略抬，保持到词尾：/siːl/、/tuːl/</td>
+<td>seal /siːl/ – see /siː/；tool /tuːl/ – too /tuː/</td>
+</tr>
+</tbody>
+</table></div>
+<p>练法：每个最小对立读 5 遍，第 1 遍慢速夸张，第 2 遍正常语速；录音回放，只听"是否区分得开"，不管口音。</p>
+<h3>2. 影子跟读 8min：两段工作场景稿</h3>
+<p><strong>Passage A — 图纸评审会开场（约 40 秒）</strong></p>
+<blockquote>
+<p>Good morning, everyone. Thanks for joining the design review. Today we'll walk through the weatherstrip <strong>profile</strong> /ˈproʊfaɪl/ for the new SUV program. First, I'll cover the <strong>sealing</strong> /ˈsiːlɪŋ/ requirements, then the <strong>durometer</strong> /dʊˈrɑːmɪtər/ callouts, and finally the open issues. Please hold questions until the end of each section, and if something is <strong>blocking</strong> /ˈblɑːkɪŋ/ your work, flag it right away.</p>
+</blockquote>
+<p>发音点：<br>
+- <em>walk through</em> → /wɔːk θruː/，/k/ 与 /θ/ 相接，/k/ 只做口型不出声（不完全爆破）。<br>
+- <em>hold questions</em> → /hoʊld ˈkwestʃənz/，/d/ + /k/ 时 /d/ 弱化，几乎听不见。<br>
+- <em>until the end</em> → /ənˈtɪl ði ˈend/，<em>the</em> 在元音前读 /ði/。<br>
+- 连读：<em>cover‿it</em>、<em>flag‿it</em> 词间加轻微 /j/ 滑音。<br>
+- 节奏：每句重音落在 <strong>re-view / profile / SEAL-ing / DU-rom-eter / BLOCK-ing</strong>，其余压缩。</p>
+<p><strong>Passage B — 供应商电话（约 35 秒）</strong></p>
+<blockquote>
+<p>Hi Mark, it's Lin from Cooper Standard. I'm calling about the EPDM <strong>compound</strong> /ˈkɑːmpaʊnd/ you shipped last week. The <strong>hardness</strong> /ˈhɑːrdnəs/ came in at 72 Shore A, but our spec is 68 plus or minus three, so it's <strong>borderline</strong> /ˈbɔːrdərlaɪn/. Could you pull the <strong>batch</strong> /bætʃ/ records and check the cure time? We'd like a <strong>corrective action</strong> /kəˈrektɪv ˈækʃn/ by Friday.</p>
+</blockquote>
+<p>发音点：<br>
+- <em>it's Lin</em> → /ɪts lɪn/，/ts/ 连读成一个塞擦音。<br>
+- <em>came in at</em> → /keɪm‿ɪn‿æt/，三词连读，/m/ 与 /ɪ/ 自然衔接。<br>
+- <em>plus or minus</em> → /plʌs ər ˈmaɪnəs/，<em>or</em> 弱读为 /ər/。<br>
+- <em>would like</em> → /wʊd laɪk/，/d/ 与 /l/ 同化，听起来像"wull-like"。<br>
+- 节奏：数字 <strong>72 / 68 / three</strong> 重读放慢，其余连成一串。</p>
+<p>跟读方法：先盲听 1 遍抓大意 → 看稿跟读 2 遍（落后原声 1–2 词）→ 脱稿复述 1 遍。</p>
+<h3>3. 功能句 6 组 6min</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>直接版</th>
+<th>委婉版</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>打断并提问</td>
+<td>I have a question.</td>
+<td>Sorry to jump in — quick question on the durometer callout.</td>
+</tr>
+<tr>
+<td>表示没听懂</td>
+<td>I don't understand.</td>
+<td>Just to make sure I've got it — you mean the tolerance is ±3, right?</td>
+</tr>
+<tr>
+<td>指出问题</td>
+<td>This spec is wrong.</td>
+<td>I think there may be a mismatch between the drawing and the test report.</td>
+</tr>
+<tr>
+<td>请求延期</td>
+<td>I need more time.</td>
+<td>Would it work if we pushed the DV (design validation) build to next Wednesday?</td>
+</tr>
+<tr>
+<td>拒绝方案</td>
+<td>That won't work.</td>
+<td>That could be tricky on the extrusion line — can we look at an alternative?</td>
+</tr>
+<tr>
+<td>确认行动项</td>
+<td>You do it.</td>
+<td>So to confirm, you'll send the batch records by Friday — is that right?</td>
+</tr>
+</tbody>
+</table></div>
+<h3>4. 词汇 12 个 6min</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>词</th>
+<th>音标</th>
+<th>释义</th>
+<th>搭配</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>durometer</td>
+<td>/dʊˈrɑːmɪtər/</td>
+<td>硬度；硬度计</td>
+<td>Shore A durometer reading</td>
+</tr>
+<tr>
+<td>hardness</td>
+<td>/ˈhɑːrdnəs/</td>
+<td>硬度</td>
+<td>hardness tolerance, hardness drift</td>
+</tr>
+<tr>
+<td>compound</td>
+<td>/ˈkɑːmpaʊnd/</td>
+<td>胶料、混炼胶</td>
+<td>EPDM compound, compound batch</td>
+</tr>
+<tr>
+<td>cure</td>
+<td>/kjʊr/</td>
+<td>硫化</td>
+<td>cure time, cure state, under-cured</td>
+</tr>
+<tr>
+<td>tolerance</td>
+<td>/ˈtɑːlərəns/</td>
+<td>公差</td>
+<td>±3 tolerance, tighten the tolerance</td>
+</tr>
+<tr>
+<td>spec</td>
+<td>/spek/</td>
+<td>规范（specification 口语）</td>
+<td>meet spec, out of spec</td>
+</tr>
+<tr>
+<td>batch</td>
+<td>/bætʃ/</td>
+<td>批次</td>
+<td>batch record, batch-to-batch variation</td>
+</tr>
+<tr>
+<td>profile</td>
+<td>/ˈproʊfaɪl/</td>
+<td>型材断面</td>
+<td>extrusion profile, seal profile</td>
+</tr>
+<tr>
+<td>weatherstrip</td>
+<td>/ˈweðərstrɪp/</td>
+<td>密封条</td>
+<td>door weatherstrip, glass run</td>
+</tr>
+<tr>
+<td>compression set</td>
+<td>/kəmˈpreʃn set/</td>
+<td>压缩永久变形</td>
+<td>compression set at 70h/100°C</td>
+</tr>
+<tr>
+<td>deflection</td>
+<td>/dɪˈflekʃn/</td>
+<td>压缩变形量、挠度</td>
+<td>seal deflection, load-deflection</td>
+</tr>
+<tr>
+<td>out of spec</td>
+<td>/aʊt əv spek/</td>
+<td>超差</td>
+<td>borderline / out of spec</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>词根专栏：</strong> <em>duro-</em> 来自拉丁语 <em>durus</em>（硬），同源词：<strong>durable</strong>（耐久的）、<strong>durometer</strong>（硬度计）、<strong>obdurate</strong>（固执的）、<strong>endure</strong>（忍受）。记住一条链：<em>durus</em> 硬 → 耐久 → 硬度。工程里见到 <em>duro-</em> 基本都和"硬/耐久"有关。</p>
+<h3>5. 场景对话 4min（6–8 轮）</h3>
+<p><strong>A（质量工程师）／B（你，产品开发培训生）</strong></p>
+<p>A: Morning. The hardness on this batch is reading 74 Shore A — that's out of spec.<br>
+B: Thanks for flagging it. <strong>Just to confirm</strong>, is that an average of five readings or a single spot check?（地道：flag it = 提出来；spot check = 抽检）<br>
+A: Average of five, taken on the finished seal.<br>
+B: Got it. <strong>My read is</strong> the cure time may have drifted — the compound looks fine on the certificate.<br>
+A: Can you check the batch records?<br>
+B: Sure. <strong>I'll pull them and get back to you by noon.</strong>（地道：pull records = 调记录）<br>
+A: And if it's the cure, what's the fix?<br>
+B: We'd <strong>dial in</strong> the cure time first, then re-test. <strong>Worst case</strong>, we re-mix the batch.（地道：dial in = 微调到位；worst case = 最坏情况）<br>
+A: Sounds good. Keep me posted.</p>
+<h3>6. 输出任务 2min</h3>
+<ol>
+<li><strong>录音 60 秒</strong>：用 Passage B 的句式，向你"虚拟供应商"说明一次硬度超差，必须包含：数字、公差、请求行动、时间点。录完自评三个 /θ/、/v/、词尾 /l/ 是否到位。</li>
+<li><strong>写 5 句</strong>：用今天 6 组功能句各造 1 句，主题必须是你真实工作内容（密封条、图纸、测试）。写完朗读一遍，标出重音词。</li>
+</ol>
+<hr>
+<h2>Part 2 产品专题 25 分钟：硬度 durometer 全解</h2>
+<h3>1. 一句话定义与图纸位置</h3>
+<p><strong>硬度（hardness / durometer）</strong> 是密封条胶料抵抗压头局部压入的能力，工程上以 <strong>邵氏 A（Shore A）</strong> 标尺表示，是无量纲数值。在图纸上它出现在<strong>材料标注（material callout）</strong> 或<strong>技术要求注释（general notes）</strong> 里，通常写成 <code>EPDM, 70 ± 5 Shore A, per ASTM D2240</code>，与密度、拉伸强度、压缩永久变形并列，属于<strong>材料性能项</strong>，不是尺寸项。</p>
+<h3>2. 怎么测</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>标准号</td>
+<td>ASTM D2240（美标）／ISO 868（国际）／GB/T 531.1（国标），三者方法一致</td>
+</tr>
+<tr>
+<td>设备</td>
+<td>邵氏 A 型硬度计（durometer, Type A），弹簧加载</td>
+</tr>
+<tr>
+<td>压头几何</td>
+<td>截头圆锥，端面直径 0.79 mm，锥角 35°，顶端圆角 R0.1 mm</td>
+</tr>
+<tr>
+<td>试样</td>
+<td>厚度 ≥6 mm；薄件可叠层（stacking），最多叠至 6 mm；表面平整、无缺陷</td>
+</tr>
+<tr>
+<td>环境</td>
+<td>标准实验室 23±2 °C、50±5 % RH；试样状态调节 ≥1 h（ISO 推荐 16 h 更稳）</td>
+</tr>
+<tr>
+<td>读数方式</td>
+<td>压头垂直压紧、与试样完全接触，<strong>1 秒内读瞬时值</strong>（instantaneous）或 <strong>15 秒读延迟值</strong>，两者不可混用，报告须注明</td>
+</tr>
+<tr>
+<td>取值规则</td>
+<td>同一试样测 <strong>5 点</strong>，点间距 ≥6 mm、距边缘 ≥12 mm，取<strong>中位数</strong>（median）；极差超 5 需复测</td>
+</tr>
+</tbody>
+</table></div>
+<p>关键：硬度计是<strong>相对测量</strong>，每日开机须用<strong>标准硬度块（reference block）</strong> 校准，偏差 &gt;1 单位即停用。</p>
+<h3>3. 标尺对比表</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>标尺</th>
+<th>适用材料</th>
+<th>压头</th>
+<th>典型范围</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shore A</td>
+<td>软胶、弹性体</td>
+<td>圆锥钝头</td>
+<td>20–90</td>
+<td>密封条主用</td>
+</tr>
+<tr>
+<td>Shore D</td>
+<td>硬塑料、硬胶</td>
+<td>圆锥尖头</td>
+<td>40–90</td>
+<td>与 A 不通用</td>
+</tr>
+<tr>
+<td>Shore 00</td>
+<td>超软胶、海绵</td>
+<td>球头</td>
+<td>20–90</td>
+<td>海绵密封条用</td>
+</tr>
+<tr>
+<td>IRHD</td>
+<td>橡胶（国际硬度）</td>
+<td>球压头</td>
+<td>30–90</td>
+<td>与 Shore A 近似但不可互换</td>
+</tr>
+<tr>
+<td>邵氏 A 与 D 重叠区</td>
+<td>—</td>
+<td>—</td>
+<td>A90 ≈ D40</td>
+<td>只作参考，不作换算依据</td>
+</tr>
+</tbody>
+</table></div>
+<h3>4. 典型值表（工程参考，非规范）</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>部位</th>
+<th>材料</th>
+<th>典型 Shore A</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>车门密封条密实胶（dense rubber）</td>
+<td>EPDM</td>
+<td>65–75</td>
+</tr>
+<tr>
+<td>玻璃导槽（glass run）唇口</td>
+<td>EPDM / TPV</td>
+<td>60–70</td>
+</tr>
+<tr>
+<td>海绵泡管（sponge bulb）</td>
+<td>EPDM 发泡</td>
+<td>25–40（或用 Shore 00）</td>
+</tr>
+<tr>
+<td>内饰亮条包边（trim lip）</td>
+<td>TPV / PVC</td>
+<td>70–85</td>
+</tr>
+<tr>
+<td>硬质骨架（carrier）</td>
+<td>PP / 金属</td>
+<td>不测 Shore A，测 Shore D 或不计</td>
+</tr>
+<tr>
+<td>Fortrex 类轻量化密实胶</td>
+<td>专有配方</td>
+<td>55–70</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>以上为行业常见区间，仅供估算，实际以图纸与材料规范为准。</strong></p>
+<h3>5. 硬度升高/降低的连锁影响</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>变化</th>
+<th>直接性能</th>
+<th>后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>硬度↑</td>
+<td>压缩负荷（CLD）↑、密封力↑</td>
+<td>关门力（door closing effort）↑、异响风险↑、装配困难</td>
+</tr>
+<tr>
+<td>硬度↑</td>
+<td>耐磨↑</td>
+<td>但柔顺性↓，贴合曲面能力↓，易渗水</td>
+</tr>
+<tr>
+<td>硬度↓</td>
+<td>压缩永久变形可能↑（视配方）</td>
+<td>长期密封力衰减、老化后渗漏</td>
+</tr>
+<tr>
+<td>硬度↓</td>
+<td>柔顺性↑、贴合好</td>
+<td>但抗撕裂↓、挤出易变形、尺寸稳定性↓</td>
+</tr>
+<tr>
+<td>硬度波动（批间）</td>
+<td>装配一致性↓</td>
+<td>线束/工装需反复调，客户投诉</td>
+</tr>
+</tbody>
+</table></div>
+<h3>6. 配方与设计杠杆</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>杠杆</th>
+<th>方向</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>炭黑（carbon black）用量↑</td>
+<td>硬度↑</td>
+<td>最直接的补强手段，过量影响弹性</td>
+</tr>
+<tr>
+<td>增塑剂/油（plasticizer/oil）↑</td>
+<td>硬度↓</td>
+<td>但易迁移、老化后硬度回升</td>
+</tr>
+<tr>
+<td>交联密度（cure density）↑</td>
+<td>硬度↑</td>
+<td>与硫化体系、促进剂相关</td>
+</tr>
+<tr>
+<td>填料（白炭黑、碳酸钙）</td>
+<td>硬度↑</td>
+<td>成本与性能权衡</td>
+</tr>
+<tr>
+<td>发泡倍率（sponge）↑</td>
+<td>硬度↓</td>
+<td>泡管专用</td>
+</tr>
+<tr>
+<td>断面设计（壁厚、空腔）</td>
+<td>表观刚度变化</td>
+<td>不改胶料也能调密封力</td>
+</tr>
+</tbody>
+</table></div>
+<h3>7. 温度/时间/老化漂移</h3>
+<ul>
+<li><strong>温度</strong>：橡胶硬度随温度升高而下降（典型 -0.5～-1 Shore A / 10 °C），低温则变硬。低温下密封条变硬是<strong>关门力冬季升高</strong>的主因。</li>
+<li><strong>老化</strong>：热氧老化后增塑剂挥发/迁移，硬度通常<strong>上升 3–8 单位</strong>（70 h @ 100 °C 后常见）；压缩永久变形同步恶化。</li>
+<li><strong>时间</strong>：未硫化胶存放会自然硬化；成品长期受压部位出现"硬化 + 永久变形"复合劣化。</li>
+<li>结论：图纸硬度是<strong>初始值</strong>，需配套<strong>老化后硬度变化限值</strong>（如 Δ≤+8 Shore A）。</li>
+</ul>
+<h3>8. 图纸与规范怎么写</h3>
+<pre><code>MATERIAL: EPDM, dense
+HARDNESS: 70 ± 5 Shore A
+TEST METHOD: ASTM D2240, Type A, 1 s instantaneous reading
+SPECIMEN: finished seal section, thickness ≥ 6 mm (stack if needed)
+READINGS: 5 points, median reported; range ≤ 5
+CONDITIONING: 23 ± 2 °C, 50 ± 5 % RH, ≥ 16 h
+AGING: 70 h @ 100 °C per ASTM D573; hardness change ≤ +8 Shore A
+CALIBRATION: reference block check before each session, deviation ≤ 1 unit
+</code></pre>
+<p>要点：<strong>标尺 + 数值 + 公差 + 方法 + 读数方式 + 试样 + 老化要求</strong>，七项缺一不可。</p>
+<h3>9. 测量与应用陷阱</h3>
+<ol>
+<li><strong>薄件直接测</strong>：厚度 &lt;6 mm 不叠层，读数偏高且离散大。</li>
+<li><strong>瞬时值 vs 15 秒值混用</strong>：两者差 3–5 单位，报告不注明就不可比。</li>
+<li><strong>压头未垂直</strong>或压在圆角、唇口上，读数偏低。</li>
+<li><strong>未校准</strong>：硬度计弹簧疲劳，系统性偏差被当成"批间波动"。</li>
+<li><strong>把 Shore A 与 Shore D / IRHD 直接换算</strong>：只能近似，不能作为判定依据。</li>
+<li><strong>只测初始硬度、不测老化后</strong>：装车 2 年后渗漏，根因常在这里。</li>
+</ol>
+<h3>10. 延伸到当前产品与技术方向</h3>
+<ul>
+<li><strong>Fortrex</strong>（库博标准轻量化密封材料平台）：以更低密度实现目标密封力，硬度设计需与<strong>轻量化 + 低压缩负荷</strong>联动，硬度常略低于传统 EPDM 密实胶。</li>
+<li><strong>FlexiFit / FlexiCore</strong>（可变断面/柔性骨架类密封方案）：断面柔性靠<strong>结构</strong>而非单纯降硬度，因此硬度公差可适度放宽、靠几何补偿。</li>
+<li>电动车（EV）方向：风噪要求高 → 密封力↑，但关门力与续航（重量）要求↓，<strong>硬度-断面-材料</strong>三者必须联合优化，硬度单点优化会失败。</li>
+<li>海绵泡管 + 密实胶复合挤出（dual durometer / co-extrusion）：同一断面两个硬度，图纸须<strong>分区标注</strong>，测试须<strong>分区取样</strong>。</li>
+</ul>
+<h3>11. 自测 5 题</h3>
+<ol>
+<li>图纸写 <code>70 ± 5 Shore A, ASTM D2240</code>，还缺哪三项关键信息？</li>
+<li>试样厚度只有 4 mm，正确做法是什么？不这么做会怎样？</li>
+<li>某批硬度均值合格但极差 8，是否放行？依据是什么？</li>
+<li>硬度从 70 降到 62，列出两条可能的性能后果。</li>
+<li>老化后硬度上升 10 单位，最可能的原因是什么？对密封有何影响？</li>
+</ol>
+<h3>参考答案</h3>
+<ol>
+<li>缺：<strong>读数方式</strong>（1 s 瞬时还是 15 s 延迟）、<strong>试样与取样位置</strong>（成品断面还是标准试片、是否叠层）、<strong>老化后要求</strong>（老化条件与硬度变化限值）。此外校准与取值规则（5 点中位数）也应写明。</li>
+<li>正确做法：<strong>叠层至 ≥6 mm</strong>（同材质、表面贴合、无气隙），或改用微型硬度计并注明方法。不叠层会导致读数<strong>偏高且离散大</strong>，把合格件判成超差，或掩盖真实偏低。</li>
+<li><strong>不放行，先复测</strong>。取值规则要求 5 点中位数且<strong>极差 ≤5</strong>；极差 8 说明试样表面不均、硫化不均或测量手法有问题。应换点复测、检查硫化与压头垂直度，确认后再判定。</li>
+<li>①压缩负荷下降 → 长期密封力不足、老化后渗漏风险↑；②抗撕裂与耐磨下降 → 装配或使用中唇口破损；同时可能伴随增塑剂偏多，老化后硬度回升、尺寸不稳。</li>
+<li>最可能：<strong>增塑剂挥发/迁移</strong>或<strong>后硫化/继续交联</strong>。影响：密封条变硬 → 柔顺性下降、贴合变差、关门力升高，同时压缩永久变形恶化，长期密封能力衰减。</li>
+</ol></body></html>
