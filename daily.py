@@ -280,7 +280,7 @@ def render(md_text: str, title: str) -> str:
 def rebuild_index() -> None:
     items = []
     for p in sorted(DOCS.glob("*.html")):
-        if p.name == "index.html":
+        if p.name in ("index.html", "today.html"):
             continue
         text = p.read_text(encoding="utf-8")
         m = re.search(r"<title>(.*?)</title>", text, re.S)
