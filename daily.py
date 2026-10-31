@@ -188,7 +188,8 @@ def build_prompt(day_no: int, date: dt.date, en_focus: str, product_topic: str,
 - 「今天记住三句话」
 - 「对你的实操含义」：连到密封系统产品开发岗位
 
-长度：正文 3500–5000 字。所有英文术语首次出现给中文。"""
+长度：正文 2600–3400 字，必须完整写完 Part 4 的四条，不得中途截断。
+所有英文术语首次出现给中文。新闻部分不要逐条复述标题，只挑最关键的事实，其余合并成一句话。"""
 
 
 def call_llm(prompt: str) -> str:
@@ -202,7 +203,7 @@ def call_llm(prompt: str) -> str:
             {"role": "user", "content": prompt},
         ],
         "temperature": 0.75,
-        "max_tokens": 8000,
+        "max_tokens": 8192,
     }).encode()
     req = urllib.request.Request(
         "https://api.deepseek.com/chat/completions",
@@ -346,11 +347,11 @@ def main() -> None:
     en_focus, product_topic = topic_for(day_no)
 
     news = {
-        "世界": google_news("国际局势 OR 地缘政治 OR 中东 when:7d"),
-        "中国": google_news("中国经济 OR 宏观政策 when:7d"),
-        "汽车行业": google_news("汽车 新能源 产销 乘用车 when:7d"),
-        "密封与零部件": google_news("汽车零部件 OR 橡胶 OR 密封 when:7d"),
-        "市场": google_news("A股 OR 美股 OR 财报 when:7d"),
+        "世界": google_news("国际局势 OR 地缘政治 OR 中东 when:7d", 4),
+        "中国": google_news("中国经济 OR 宏观政策 when:7d", 4),
+        "汽车行业": google_news("汽车 新能源 产销 乘用车 when:7d", 5),
+        "密封与零部件": google_news("汽车零部件 OR 橡胶 OR 密封 when:7d", 3),
+        "市场": google_news("A股 OR 美股 OR 财报 when:7d", 4),
     }
     quotes = market_quotes()
 
