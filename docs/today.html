@@ -3,7 +3,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#16181a" media="(prefers-color-scheme: dark)">
-<title>Day 02 · 2026-11-01｜EPDM 配方与硫化：为什么会变硬、会开裂</title><style>
+<title>Day 03 · 2026-11-02｜压缩负荷 CLD</title><style>
 :root{--bg:#fbfaf7;--fg:#1c1b19;--muted:#6b6862;--line:#e2ded6;--card:#fff;
 --accent:#0a6b5f;--accent2:#b4531a;--code:#f2efe9}
 @media (prefers-color-scheme:dark){:root{--bg:#16181a;--fg:#e8e6e1;--muted:#9a968e;
@@ -43,8 +43,8 @@ border-radius:14px;text-decoration:none;color:inherit}
 footer{margin-top:3em;padding-top:1.2em;border-top:1px solid var(--line);
 color:var(--muted);font-size:.82em;text-align:center}
 </style></head><body><div class="topbar"><a href="./index.html">← 返回目录</a></div><h2>Part 1 英语 25 分钟</h2>
-<h3>1. 语音热身 3 min：三个高频错音 + 最小对立</h3>
-<p>工程会议里最容易让人“听不懂你”的三个音：/θ/、/v/、词尾 /l/。中国人常见问题分别是：/θ/ 读成 /s/ 或 /f/；/v/ 读成 /w/；词尾 /l/ 吞掉或读成 /ʊ/。</p>
+<h3>1. 语音热身 3min：三个中国人常见错音</h3>
+<p>工程会议里最容易被听错、也最影响可信度的三个音：/θ/、/v/、词尾 /l/。</p>
 <div class="tw"><table>
 <thead>
 <tr>
@@ -56,61 +56,52 @@ color:var(--muted);font-size:.82em;text-align:center}
 </thead>
 <tbody>
 <tr>
-<td>/θ/ 舌尖未伸出齿间</td>
-<td>think → “sink”</td>
-<td>/θɪŋk/ 舌尖轻触上齿背、送气</td>
-<td>think /θɪŋk/ vs sink /sɪŋk/</td>
+<td>/θ/ 读成 /s/ 或 /f/</td>
+<td><em>sink</em> for <strong>think</strong>；<em>fick</em> for <strong>thick</strong></td>
+<td>舌尖轻触上齿背、送气不振动：<strong>think</strong> /θɪŋk/</td>
+<td>think–sink；thick–sick；mouth–mouse</td>
 </tr>
 <tr>
-<td>/v/ 用双唇</td>
-<td>value → “walue”</td>
-<td>/ˈvæljuː/ 上齿咬下唇、声带振动</td>
-<td>vest /vest/ vs west /west/</td>
+<td>/v/ 读成 /w/</td>
+<td><em>wery</em> for <strong>very</strong>；<em>walve</em> for <strong>valve</strong></td>
+<td>上齿轻咬下唇、声带振动：<strong>valve</strong> /vælv/</td>
+<td>very–wary；valve–wail；vest–west</td>
 </tr>
 <tr>
-<td>词尾 /l/ 吞音</td>
-<td>seal → “sea-ou”</td>
-<td>/siːl/ 舌尖抵上齿龈、舌后部略抬</td>
-<td>seal /siːl/ vs see /siː/</td>
-</tr>
-<tr>
-<td>/θ/ 与 /f/ 混</td>
-<td>thickness → “fickness”</td>
-<td>/ˈθɪknəs/ 舌尖齿间，不是唇齿</td>
-<td>thick /θɪk/ vs fix... 用 three /θriː/ vs free /friː/</td>
-</tr>
-<tr>
-<td>/v/ 词尾清化</td>
-<td>improve → “improof”</td>
-<td>/ɪmˈpruːv/ 词尾仍振动</td>
-<td>save /seɪv/ vs safe /seɪf/</td>
+<td>词尾 /l/ 吞掉或卷成 /r/</td>
+<td><em>seaw</em> for <strong>seal</strong>；<em>moed</em> for <strong>mold</strong></td>
+<td>舌尖抵上齿龈、舌后略抬，保持到词尾：<strong>seal</strong> /siːl/</td>
+<td>seal–seer；mold–mord（非词，感知训练）；tool–tour</td>
 </tr>
 </tbody>
 </table></div>
-<p>练法：每个对立读 5 组，手放喉结感受 /v/ 振动，镜子看 /θ/ 舌尖是否露出。</p>
-<h3>2. 影子跟读 8 min：两段真实工作场景稿</h3>
-<p><strong>稿 A：问硫化曲线为什么异常（约 45 秒）</strong></p>
+<p>操作：每对读 5 遍，第 1–3 遍慢速夸张，第 4–5 遍正常语速；录音回放，只判断“对方会不会听成另一个词”。</p>
+<h3>2. 影子跟读 8min：两段真实工作场景稿</h3>
+<p><strong>稿 A（30–40 秒，CLD 数据评审）</strong></p>
 <blockquote>
-<p>“I noticed the cure curve for batch 24-117 is flatter than usual. The torque doesn’t plateau the way it did last week. I’m not saying the compound is wrong — I just want to understand whether the accelerator level shifted or the cure temperature drifted. Could you walk me through how the batch was weighed? I’d like to rule out a weighing error before we look at the press.”</p>
+<p>“The seal is validated at three compression levels before the design freeze. At 25 percent compression, the load is measured after a 30-minute dwell, so that the viscoelastic settle-down is captured. The reading is taken from the third loading cycle, and the first two cycles are treated as conditioning. If the curve is still drifting, the sample is re-seated and the run is repeated.”</p>
 </blockquote>
-<p>发音点：<br>
-- <em>noticed the</em> → /ˈnoʊtɪst ðə/，/t/ + /ð/ 不要读成 /d/。<br>
-- <em>doesn’t plateau</em> → /ˈdʌznt plæˈtoʊ/，plateau 重音在第二音节。<br>
-- <em>I’m not saying... I just want to</em> → 节奏上“not saying”轻读快过，“I just want to”连成 /aɪ dʒəs wənə/。<br>
-- <em>rule out</em> → 连读 /ruːˈlaʊt/，out 的 /t/ 可轻弹。<br>
-- <em>walk me through</em> → /wɔːk mi θruː/，through 的 /θr/ 别读成 /tr/。</p>
-<p><strong>稿 B：向供应商委婉追问配方变更（约 40 秒）</strong></p>
+<p>发音点与节奏：<br>
+- <em>is validated</em> → /ɪz ˈvælɪdeɪtɪd/，<em>is</em> 弱读为 /ɪz/，重音落在 <strong>val</strong>，不要读成“伊兹-维利-戴替德”四个平均重音。<br>
+- <em>at three compression levels</em> → <em>at</em> 弱读 /ət/，<em>three</em> 的 /θr/ 不要读成 /sr/。<br>
+- <em>25 percent</em> → 读 <strong>twenty-five percent</strong>，percent 重音在 /sent/。<br>
+- <em>so that the</em> → 连读 /səʊ ðət ðə/，<em>that</em> 弱读为 /ðət/。<br>
+- <em>third loading cycle</em> → 词尾 /d/ 与 /l/ 相接，<em>third loading</em> 读 /θɜːd ˈləʊdɪŋ/，不要加元音变成“third-er”。<br>
+- 节奏：每个数据点后停半拍（compression levels / dwell / third cycle），让听者记数字。</p>
+<p><strong>稿 B（40–60 秒，客户问题回复）</strong></p>
 <blockquote>
-<p>“Thanks for sending the updated datasheet. One thing I’d like to clarify: the Mooney viscosity range looks a bit wider than the previous revision. Is that intentional, or is it just a rounding change? It would help us a lot to know the reason, because our extrusion window is fairly tight. No pressure — just trying to plan ahead.”</p>
+<p>“We compared the two compounds at 70 degrees Celsius. Compound B showed a lower load at the same compression, which means it will seat more easily but may lose sealing force faster under long-term aging. The recommendation is that the profile is re-cut with a slightly higher interference, and that both compounds are re-tested after 168 hours of heat aging. Can we confirm the test matrix by Friday?”</p>
 </blockquote>
-<p>发音点：<br>
-- <em>I’d like to</em> → /aɪd laɪk tə/，d 与 l 之间不要加元音。<br>
-- <em>a bit wider</em> → /ə bɪt ˈwaɪdər/，bit 的 /t/ 在美音中常弹舌。<br>
-- <em>intentional</em> → /ɪnˈtenʃənl/，重音第二音节，词尾 /l/ 要出来。<br>
-- <em>It would help us</em> → /ɪt wʊd help əs/，would 的 /d/ 轻带。<br>
-- <em>No pressure</em> → /noʊ ˈpreʃər/，节奏上作停顿缓冲，语气降调。</p>
-<p>跟读方法：先听一遍抓节奏，第二遍跟读只模仿重音与停顿，第三遍再纠音。</p>
-<h3>3. 功能句 6 组：直接版 vs 委婉版</h3>
+<p>发音点与节奏：<br>
+- <em>compared the two</em> → <em>compared</em> 词尾 /d/ 与 <em>the</em> 连读 /kəmˈpeəd ðə/。<br>
+- <em>70 degrees Celsius</em> → <strong>seventy degrees Celsius</strong>，Celsius /ˈselsiəs/，重音在 <strong>Cel</strong>。<br>
+- <em>which means it will</em> → <em>which</em> 词尾 /tʃ/ 短促，<em>means it</em> 连读 /miːnz ɪt/。<br>
+- <em>seat more easily</em> → <em>seat</em> 词尾 /t/ 可轻爆破，不要吞成 <em>sea</em>。<br>
+- <em>is that the profile is re-cut</em> → 两个 <em>is</em> 都弱读 /ɪz/；<em>re-cut</em> 重音在 <strong>cut</strong>。<br>
+- <em>168 hours</em> → <strong>one hundred and sixty-eight hours</strong>，注意 <em>hours</em> 前用 /h/ 不脱落。<br>
+- 节奏：<em>but may lose sealing force faster</em> 这一串是信息核心，放慢、加重 <em>lose</em> 和 <em>faster</em>。</p>
+<p>跟读方法：先盲听一遍抓大意，再逐句跟读 3 遍（第 3 遍延迟 1–2 个词），最后脱稿复述数据点。</p>
+<h3>3. 功能句 6 组 6min（被动语态为主）</h3>
 <div class="tw"><table>
 <thead>
 <tr>
@@ -121,39 +112,39 @@ color:var(--muted);font-size:.82em;text-align:center}
 </thead>
 <tbody>
 <tr>
-<td>追问原因</td>
-<td>Why is the hardness higher?</td>
-<td>Could you help me understand what might be driving the higher hardness?</td>
+<td>指出测试没做</td>
+<td>The CLD test wasn't done.</td>
+<td>The CLD data hasn't been captured yet — can we schedule it this week?</td>
 </tr>
 <tr>
 <td>质疑数据</td>
-<td>This data is wrong.</td>
-<td>I might be misreading this — could we double-check the test conditions?</td>
+<td>Your number is wrong.</td>
+<td>The reading may have been taken before the dwell was completed — could it be re-checked?</td>
 </tr>
 <tr>
-<td>要求改配方</td>
-<td>Change the accelerator level.</td>
-<td>Would it be feasible to look at the accelerator level as one option?</td>
+<td>要求改图纸</td>
+<td>Change the compression to 30%.</td>
+<td>It's recommended that the compression be raised to 30% — would that be acceptable?</td>
 </tr>
 <tr>
-<td>追问延迟</td>
-<td>Why are you late?</td>
-<td>I’d like to understand what’s affecting the timeline so we can plan around it.</td>
+<td>说明流程</td>
+<td>We test it at three levels.</td>
+<td>The seal is validated at three compression levels before design freeze.</td>
 </tr>
 <tr>
-<td>指出缺陷</td>
-<td>Your part cracked.</td>
-<td>We’re seeing some cracking on our side — I wonder if you’ve observed anything similar.</td>
+<td>推责任到标准</td>
+<td>You didn't follow the standard.</td>
+<td>The specimen geometry is specified in the standard — was the 25 mm pad used?</td>
 </tr>
 <tr>
 <td>拒绝方案</td>
-<td>No, that won’t work.</td>
-<td>I have some concerns about that approach — can I share what we’re seeing?</td>
+<td>This compound won't work.</td>
+<td>This compound is unlikely to be approved at that temperature — the load drop is too steep.</td>
 </tr>
 </tbody>
 </table></div>
-<p>委婉三件套：<strong>softener（缓冲语）+ 事实陈述 + 请求式问句</strong>。例：<em>I might be missing something, but the torque looks low — could you walk me through the batch record?</em></p>
-<h3>4. 词汇 12 个 6 min</h3>
+<p>要点：被动语态在工程英语里不是“客气”，而是<strong>把动作和责任人分开</strong>，让焦点落在对象和数据上；需要追责时再切回主动句（<em>Who took this reading?</em>）。</p>
+<h3>4. 词汇 12 个 6min</h3>
 <div class="tw"><table>
 <thead>
 <tr>
@@ -165,194 +156,159 @@ color:var(--muted);font-size:.82em;text-align:center}
 </thead>
 <tbody>
 <tr>
-<td>cure</td>
-<td>/kjʊr/</td>
-<td>硫化</td>
-<td>cure curve 硫化曲线, cure time 硫化时间</td>
+<td>compression load deflection (CLD)</td>
+<td>/kəmˈpreʃn ləʊd dɪˈflekʃn/</td>
+<td>压缩负荷挠度（压缩负荷）</td>
+<td>CLD at 25% compression</td>
 </tr>
 <tr>
-<td>torque</td>
-<td>/tɔːrk/</td>
-<td>扭矩（流变仪读数）</td>
-<td>maximum torque 最大扭矩, torque rise 扭矩上升</td>
+<td>compression set</td>
+<td>/kəmˈpreʃn set/</td>
+<td>压缩永久变形</td>
+<td>compression set after 22 h at 70 °C</td>
 </tr>
 <tr>
-<td>plateau</td>
-<td>/plæˈtoʊ/</td>
-<td>平台期</td>
-<td>reach a plateau 达到平台</td>
+<td>deflection</td>
+<td>/dɪˈflekʃn/</td>
+<td>挠度、变形量</td>
+<td>force at a given deflection</td>
 </tr>
 <tr>
-<td>accelerator</td>
-<td>/əkˈseləreɪtər/</td>
-<td>促进剂</td>
-<td>accelerator level 促进剂用量</td>
+<td>dwell</td>
+<td>/dwel/</td>
+<td>保压/停留时间</td>
+<td>30-minute dwell</td>
 </tr>
 <tr>
-<td>curative</td>
-<td>/ˈkjʊrətɪv/</td>
-<td>硫化剂</td>
-<td>curative package 硫化体系</td>
+<td>viscoelastic</td>
+<td>/ˌvɪskəʊɪˈlæstɪk/</td>
+<td>粘弹性的</td>
+<td>viscoelastic settle-down</td>
 </tr>
 <tr>
-<td>scorch</td>
-<td>/skɔːrtʃ/</td>
-<td>焦烧</td>
-<td>scorch time 焦烧时间</td>
+<td>seating</td>
+<td>/ˈsiːtɪŋ/</td>
+<td>就位、贴合</td>
+<td>seal seating force</td>
 </tr>
 <tr>
-<td>compound</td>
-<td>/ˈkɑːmpaʊnd/</td>
-<td>胶料</td>
-<td>compound batch 胶料批次</td>
+<td>interference</td>
+<td>/ˌɪntəˈfɪərəns/</td>
+<td>过盈量</td>
+<td>1.5 mm interference</td>
 </tr>
 <tr>
-<td>hardness</td>
-<td>/ˈhɑːrdnəs/</td>
-<td>硬度</td>
-<td>hardness shift 硬度漂移</td>
+<td>durometer</td>
+<td>/djʊˈrɒmɪtə/</td>
+<td>邵氏硬度（计）</td>
+<td>65 Shore A durometer</td>
 </tr>
 <tr>
-<td>crack</td>
-<td>/kræk/</td>
-<td>开裂</td>
-<td>ozone cracking 臭氧开裂</td>
+<td>stress relaxation</td>
+<td>/stres ˌriːlækˈseɪʃn/</td>
+<td>应力松弛</td>
+<td>stress relaxation under heat aging</td>
 </tr>
 <tr>
-<td>degradation</td>
-<td>/ˌdeɡrəˈdeɪʃn/</td>
-<td>降解</td>
-<td>thermal degradation 热降解</td>
+<td>hysteresis</td>
+<td>/ˌhɪstəˈriːsɪs/</td>
+<td>滞后（回弹滞后）</td>
+<td>loading–unloading hysteresis</td>
 </tr>
 <tr>
-<td>drift</td>
-<td>/drɪft/</td>
-<td>漂移</td>
-<td>temperature drift 温度漂移</td>
+<td>conditioning cycle</td>
+<td>/kənˈdɪʃənɪŋ ˈsaɪkl/</td>
+<td>预调理循环</td>
+<td>first two cycles as conditioning</td>
 </tr>
 <tr>
-<td>rule out</td>
-<td>/ruːl aʊt/</td>
-<td>排除</td>
-<td>rule out a cause 排除某原因</td>
+<td>specification window</td>
+<td>/ˌspesɪfɪˈkeɪʃn ˈwɪndəʊ/</td>
+<td>规范窗口</td>
+<td>fall inside the spec window</td>
 </tr>
 </tbody>
 </table></div>
-<p><strong>词根专栏</strong>：<em>cur-</em>（关心、照料）→ cure（硫化/治愈）、curative、accurate（做得仔细 → 准确）、secure（不用操心 → 安全）。记住 <em>cure</em> 在橡胶语境不是“治好”，而是“交联定型”。</p>
-<h3>5. 场景对话 4 min</h3>
-<p>A（你）：<em>I’ve been looking at the cure curve for this batch — the torque plateau seems lower than the last one. Could you help me understand what might have changed?</em><br>
-B（工艺）：<em>Sure. We adjusted the accelerator slightly. Was that a problem?</em><br>
-A：<em>Not necessarily — I just want to rule out a weighing issue before we blame the compound. Do you have the batch record handy?</em><br>
-B：<em>Yes, I’ll send it over. Just so I understand, what’s the concern?</em><br>
-A：<em>If the plateau is low, the crosslink density may be lower, and we might see compression set issues down the road. I’d rather catch it now.</em><br>
-B：<em>Makes sense. I’ll check the scale calibration too.</em><br>
-A：<em>That would help a lot. Thanks for jumping on it.</em></p>
-<p>地道表达：<em>rule out</em>（排除）、<em>before we blame the compound</em>（先别急着怪胶料）、<em>down the road</em>（后续）、<em>jump on it</em>（马上处理）。</p>
-<h3>6. 输出任务 2 min</h3>
+<p><strong>词根专栏：-flect- / -flex-（弯）</strong><br>
+<em>deflect</em>（偏转）→ <em>deflection</em>（挠度）；<em>flex</em>（弯曲）→ <em>flexible</em>（柔性）、<em>flexural</em>（抗弯的）、<em>FlexiFit</em>。同族还有 <em>inflection</em>（拐点）。记住：凡是 CLD 报告里的“变形量”，英文几乎都用 <em>deflection</em>，不用 <em>deformation</em>（后者多指永久变形，如 compression set）。</p>
+<h3>5. 场景对话 4min</h3>
+<p>A（供应商质量）／B（库博标准密封工程师）</p>
+<ul>
+<li>A: Can you walk me through how the CLD was measured on this batch?</li>
+<li>B: Sure. <strong>The pads were cut from the corner section</strong>, 25 mm diameter, and <strong>conditioned for 24 hours</strong> at 23 °C before testing.</li>
+<li>A: And the dwell?</li>
+<li>B: <strong>A 30-minute dwell is applied</strong> at each compression level, and <strong>the reading is taken</strong> from the third cycle. <em>（地道表达：is applied / is taken，被动焦点在动作规范）</em></li>
+<li>A: Our data shows about 8% higher load. Any idea why?</li>
+<li>B: <strong>That could be down to</strong> pad thickness tolerance — <em>（地道表达：be down to = 归因于）</em> if the pad is 0.2 mm thicker, the load climbs fast. <strong>We'd better re-check</strong> the thickness before we argue about compound.</li>
+<li>A: Fair. Can the retest be done this week?</li>
+<li>B: <strong>I'll get it booked</strong> and send the raw curves, not just the summary. <em>（地道表达：get it booked = 安排上）</em></li>
+<li>A: Perfect. And please flag if the curve is still drifting.</li>
+</ul>
+<h3>6. 输出任务 2min</h3>
 <ol>
-<li><strong>录音</strong>：用手机录 60 秒，内容为“用委婉疑问句向供应商追问硬度偏高的原因”，必须包含至少 3 个委婉结构（Could you help me understand… / I might be misreading… / Would it be feasible…）。回放检查 /θ/、/v/、词尾 /l/ 各 1 次。</li>
-<li><strong>写句子</strong>：写 5 句，把今天的直接版改写成委婉版，标注你用的 softener。</li>
+<li><strong>录音 60 秒</strong>：用被动语态复述稿 A 的测试流程（至少 5 个被动句），要求包含 <em>is validated / is measured / is taken / are treated / is re-seated</em>。回放检查：/θ/ 在 <em>three</em>、词尾 /l/ 在 <em>seal</em>、/v/ 在 <em>validated</em> 是否到位。</li>
+<li><strong>写 6 句</strong>：把今天 6 组功能句的“直接版”改写成被动语态为主的委婉版，每句不超过 20 词，明早交。</li>
 </ol>
 <hr>
-<h2>Part 2 产品专题 25 分钟：EPDM 配方与硫化：为什么会变硬、会开裂</h2>
+<h2>Part 2 产品专题 25 分钟：压缩负荷 CLD</h2>
 <h3>1. 一句话定义与图纸位置</h3>
-<p>EPDM（Ethylene Propylene Diene Monomer，三元乙丙橡胶）密封条的“变硬、开裂”本质是<strong>交联密度（crosslink density）与老化后网络结构变化</strong>的外在表现；图纸上它落在<strong>材料规范（material spec）+ 硬度/压缩永久变形/耐臭氧</strong>三栏，而不是尺寸栏。</p>
+<p><strong>压缩负荷（compression load deflection, CLD）</strong>：密封条在规定的压缩量、规定的压头几何、规定的保压时间下所测得的反作用力，单位 N（或 N/100 mm 长度）。它回答一个问题——<strong>这条密封条压进去要多大力量、又能回馈多少密封力</strong>。</p>
+<p>图纸位置：出现在<strong>材料与性能规范页（material &amp; performance specification）</strong>，与断面图（cross-section drawing）并列；断面图定几何（bubble 高度、壁厚、唇口干涉），CLD 表定“这个几何 + 这个胶料压下去应该多少牛”。它通常以“压缩率—负荷”曲线或三点表（如 25%/50%/75%）给出，并标注试样长度（如 per 100 mm）或试样形式（pad / full profile）。</p>
 <h3>2. 怎么测</h3>
-<div class="tw"><table>
-<thead>
-<tr>
-<th>项目</th>
-<th>标准</th>
-<th>设备/几何</th>
-<th>试样</th>
-<th>环境</th>
-<th>读数/取值</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>硬度</td>
-<td>ISO 48-4 / ASTM D2240（邵氏 A）</td>
-<td>邵氏 A 压头，弹簧加载</td>
-<td>厚度 ≥6 mm，叠层</td>
-<td>23±2 °C</td>
-<td>5 点取中位数，1 s 或 15 s 读数注明</td>
-</tr>
-<tr>
-<td>硫化特性</td>
-<td>ISO 6502 / ASTM D5289（MDR）</td>
-<td>无转子流变仪，模腔</td>
-<td>约 4–5 g 胶料</td>
-<td>指定温度（如 160/180 °C）</td>
-<td>ML、MH、t10、t90、ts2</td>
-</tr>
-<tr>
-<td>压缩永久变形</td>
-<td>ISO 815 / ASTM D395</td>
-<td>压缩夹具，压缩率 25%</td>
-<td>圆柱/块状</td>
-<td>70 h @ 70 °C 或 22 h @ 100 °C</td>
-<td>恢复厚度算百分比</td>
-</tr>
-<tr>
-<td>耐臭氧</td>
-<td>ISO 1431 / ASTM D1149</td>
-<td>臭氧箱，臭氧浓度 50 pphm</td>
-<td>拉伸 20% 的条状</td>
-<td>40 °C</td>
-<td>放大镜下裂纹等级/时间</td>
-</tr>
-<tr>
-<td>热老化</td>
-<td>ISO 188 / ASTM D573</td>
-<td>热风老化箱</td>
-<td>拉伸/硬度试样</td>
-<td>70 h @ 100 °C 等</td>
-<td>硬度变化 ΔHA、拉伸变化率</td>
-</tr>
-</tbody>
-</table></div>
-<p>取值规则：硬度报“中位数 + 范围”，压缩永久变形报“单值百分比”，MDR 报“ML/MH/t90”三件套，缺一不可。</p>
-<h3>3. 参数族与标尺对比</h3>
+<ul>
+<li><strong>标准号</strong>：橡胶材料常用 <strong>ISO 7743</strong>（硫化橡胶压缩应力—应变性能测定）与 <strong>ASTM D575</strong>（压缩负荷挠度）；成品密封条常引用 <strong>SAE J1206 / 各主机厂材料标准</strong>（如 GMW、Ford WSS、大众 PV 系列）中的 CLD 条款。整车厂规范优先于通用标准。</li>
+<li><strong>设备/压头几何</strong>：万能材料试验机（universal testing machine），压缩压头为<strong>平行钢板</strong>，面积须大于试样且边缘不产生约束；测成品断面时用<strong>与断面匹配的夹具</strong>（仿窗框/门框槽形），避免侧向鼓出失真。</li>
+<li><strong>试样</strong>：材料级用<strong>圆柱或方形垫块（pad）</strong>，典型直径 25 mm、厚 12.5 mm（ISO 7743 常用 φ29 mm 或 25 mm 垫块，具体按标准）；成品级取<strong>300 mm 长密封条</strong>，两端约束，测整段负荷再折算每 100 mm。</li>
+<li><strong>环境</strong>：标准实验室 23 ± 2 °C、50 ± 5% RH；试样测试前<strong>调理（conditioning）≥ 16–24 h</strong>；高温 CLD 在恒温箱内、压头与试样同温后读数。</li>
+<li><strong>读数方式</strong>：位移控制压缩至目标压缩量，<strong>保压规定时间</strong>（常见 30 s 快速法或 30 min 稳态法），记录该时刻的力值；同时记录加载—卸载曲线以评估滞后。</li>
+<li><strong>取值规则</strong>：<strong>前两个循环作预调理（conditioning cycles），取第三个循环的加载值</strong>；同一批至少 3 件，报中位数与极差；曲线仍在漂移则重新就位重测。</li>
+</ul>
+<h3>3. 参数族/标尺对比表</h3>
 <div class="tw"><table>
 <thead>
 <tr>
 <th>参数</th>
-<th>低值含义</th>
-<th>高值含义</th>
-<th>标尺</th>
+<th>定义</th>
+<th>与 CLD 的关系</th>
+<th>典型用途</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>MH（最大扭矩）</td>
-<td>交联密度低、偏软</td>
-<td>交联密度高、偏硬</td>
-<td>与配方/温度强相关</td>
+<td>CLD（压缩负荷）</td>
+<td>定压缩量下的反力</td>
+<td>本体</td>
+<td>装配力、密封力</td>
 </tr>
 <tr>
-<td>t90（正硫化时间）</td>
-<td>硫化快</td>
-<td>硫化慢</td>
-<td>分钟</td>
+<td>CS（compression set，压缩永久变形）</td>
+<td>卸压后残余变形率</td>
+<td>CLD 高但 CS 差 = 长期失效</td>
+<td>寿命评估</td>
 </tr>
 <tr>
-<td>邵氏 A 硬度</td>
-<td>软、密封贴合好</td>
-<td>硬、抗压但贴合差</td>
-<td>40–90 A</td>
+<td>应力松弛（stress relaxation）</td>
+<td>定压缩下力随时间衰减</td>
+<td>CLD 的时变形式</td>
+<td>长期密封力</td>
 </tr>
 <tr>
-<td>压缩永久变形</td>
-<td>回弹好</td>
-<td>回弹差、易漏</td>
-<td>越低越好</td>
+<td>硬度（Shore A）</td>
+<td>压入阻力</td>
+<td>与 CLD 正相关，非线性</td>
+<td>快速筛选</td>
 </tr>
 <tr>
-<td>ΔHA（老化后硬度变化）</td>
-<td>稳定</td>
-<td>变硬/变脆</td>
-<td>±5 A 内为佳</td>
+<td>滞后（hysteresis）</td>
+<td>加载/卸载曲线面积</td>
+<td>影响回弹与异响</td>
+<td>NVH、回弹</td>
+</tr>
+<tr>
+<td>密度/发泡倍率</td>
+<td>单位体积质量</td>
+<td>发泡材料 CLD 主控</td>
+<td>轻量化</td>
 </tr>
 </tbody>
 </table></div>
@@ -362,76 +318,84 @@ A：<em>That would help a lot. Thanks for jumping on it.</em></p>
 <tr>
 <th>部位</th>
 <th>材料</th>
-<th>硬度 (Shore A)</th>
-<th>压缩永久变形</th>
-<th>备注</th>
+<th>压缩率</th>
+<th>CLD 参考值</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>车门密封条</td>
-<td>EPDM 密实胶</td>
-<td>65–75</td>
-<td>≤25%（70 h@70 °C）</td>
-<td>兼顾贴合与抗压</td>
+<td>车门主密封（body seal）</td>
+<td>EPDM 密实胶 65 Shore A</td>
+<td>30%</td>
+<td>约 25–45 N/100 mm</td>
 </tr>
 <tr>
-<td>玻璃导槽</td>
-<td>EPDM + 表面涂层</td>
-<td>70–80</td>
-<td>≤30%</td>
-<td>耐磨、低摩擦</td>
+<td>车门主密封</td>
+<td>EPDM 海绵胶（sponge）</td>
+<td>30%</td>
+<td>约 8–18 N/100 mm</td>
+</tr>
+<tr>
+<td>玻璃导槽（glass run）</td>
+<td>EPDM + 滑动涂层</td>
+<td>25%</td>
+<td>约 15–30 N/100 mm</td>
+</tr>
+<tr>
+<td>后备箱密封</td>
+<td>EPDM 海绵</td>
+<td>35%</td>
+<td>约 10–20 N/100 mm</td>
 </tr>
 <tr>
 <td>天窗密封</td>
-<td>EPDM 海绵胶</td>
-<td>25–40（海绵）</td>
-<td>—</td>
-<td>关注压缩载荷</td>
+<td>TPE/EPDM 复合</td>
+<td>25%</td>
+<td>约 20–35 N/100 mm</td>
 </tr>
 <tr>
-<td>发动机舱密封</td>
-<td>EPDM 耐热配方</td>
-<td>70–80</td>
-<td>≤35%（22 h@100 °C）</td>
-<td>耐热老化优先</td>
+<td>Fortrex 类轻量密实条</td>
+<td>TPV/热塑性弹性体体系</td>
+<td>30%</td>
+<td>约 15–30 N/100 mm（同硬度下低于 EPDM 密实胶）</td>
 </tr>
 </tbody>
 </table></div>
+<p>注意：数值随断面壁厚、bubble 数量、唇口数量变化极大，<strong>必须以断面图 + 材料标准联合定义</strong>，不可跨项目套用。</p>
 <h3>5. 参数升高/降低的连锁影响</h3>
 <div class="tw"><table>
 <thead>
 <tr>
 <th>变化</th>
-<th>性能影响</th>
-<th>后果</th>
+<th>性能后果</th>
+<th>制造/装配后果</th>
+<th>客户感知</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>交联密度↑（变硬）</td>
-<td>抗压强度↑、回弹↓</td>
-<td>密封贴合差、装配力大、异响</td>
+<td>CLD 升高</td>
+<td>密封力足、抗风噪好</td>
+<td>关门力上升、装配压入困难、夹具变形</td>
+<td>关门“硬”、需大力</td>
 </tr>
 <tr>
-<td>交联密度↓（变软）</td>
-<td>贴合好、抗压↓</td>
-<td>压缩永久变形大、长期渗漏</td>
+<td>CLD 过高</td>
+<td>局部过压、胶条蠕变、玻璃升降阻力大</td>
+<td>玻璃导槽卡滞、电机负载升</td>
+<td>异响、升降慢</td>
 </tr>
 <tr>
-<td>老化后 ΔHA↑</td>
-<td>表面脆化</td>
-<td>微裂纹起始、臭氧开裂加速</td>
+<td>CLD 降低</td>
+<td>贴合不足、易渗水渗尘</td>
+<td>装配容易、公差容错大</td>
+<td>风噪、漏水抱怨</td>
 </tr>
 <tr>
-<td>t90 偏短</td>
-<td>焦烧风险</td>
-<td>挤出表面粗糙、接头不良</td>
-</tr>
-<tr>
-<td>压缩永久变形↑</td>
-<td>回弹丧失</td>
-<td>密封失效、漏水/漏风</td>
+<td>CLD 过低</td>
+<td>长期应力松弛后失去密封</td>
+<td>压缩永久变形放大</td>
+<td>高速哨音、雨天后渗水</td>
 </tr>
 </tbody>
 </table></div>
@@ -440,83 +404,101 @@ A：<em>That would help a lot. Thanks for jumping on it.</em></p>
 <thead>
 <tr>
 <th>杠杆</th>
-<th>调整方向</th>
-<th>对硬度/开裂的影响</th>
+<th>方向</th>
+<th>备注</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>生胶门尼/乙烯含量</td>
-<td>乙烯↑</td>
-<td>硬度↑、结晶倾向↑</td>
+<td>硬度（Shore A）</td>
+<td>↑硬度 ↑CLD</td>
+<td>最直接，但影响 CS 与低温</td>
 </tr>
 <tr>
-<td>填充剂（炭黑）</td>
-<td>用量↑</td>
-<td>硬度↑、补强↑、过量易裂</td>
+<td>补强填料（炭黑）用量</td>
+<td>↑填料 ↑CLD</td>
+<td>过量损害回弹</td>
 </tr>
 <tr>
-<td>增塑剂/操作油</td>
-<td>用量↑</td>
-<td>硬度↓、老化后易迁移变硬</td>
+<td>发泡倍率（海绵胶）</td>
+<td>↑倍率 ↓CLD</td>
+<td>主控海绵条手段</td>
 </tr>
 <tr>
-<td>硫化体系</td>
-<td>过氧化物 vs 硫磺</td>
-<td>过氧化物耐热好、压缩变形优</td>
+<td>断面壁厚</td>
+<td>↑壁厚 ↑CLD</td>
+<td>与几何强耦合，改图需重验</td>
 </tr>
 <tr>
-<td>防老剂/抗臭氧剂</td>
-<td>用量↑</td>
-<td>抗臭氧开裂↑</td>
+<td>bubble/中空腔数量</td>
+<td>↑腔数 ↓CLD</td>
+<td>轻量化常用</td>
 </tr>
 <tr>
-<td>截面设计</td>
-<td>圆角/壁厚</td>
-<td>减少应力集中、抗裂</td>
+<td>唇口数量与角度</td>
+<td>影响局部 CLD 分布</td>
+<td>影响插入力</td>
+</tr>
+<tr>
+<td>过盈量（interference）</td>
+<td>↑过盈 ↑实际压缩率</td>
+<td>图纸与车身公差联动</td>
 </tr>
 </tbody>
 </table></div>
 <h3>7. 温度/时间/老化漂移</h3>
 <ul>
-<li><strong>温度</strong>：硫化温度每升 10 °C，t90 约减半（近似）；但过高导致焦烧与返原（reversion）。</li>
-<li><strong>时间</strong>：欠硫 → 交联不足 → 压缩变形差；过硫 → 返原 → 变软/发粘。</li>
-<li><strong>老化</strong>：热氧老化使 EPDM 继续交联 → 变硬、变脆；臭氧 + 拉伸应力 → 表面裂纹。</li>
-<li><strong>增塑剂迁移</strong>：长期使用后油析出 → 硬度上升、收缩开裂。</li>
+<li><strong>温度</strong>：EPDM 在 −30 °C 时 CLD 可升至常温的 2–4 倍（低温硬化），导致关车门困难、玻璃升降卡滞；高温（70–80 °C）下 CLD 下降 10–25%，密封力不足。</li>
+<li><strong>时间（应力松弛）</strong>：定压缩下力值按对数衰减，168 h 后可降 15–30%；发泡材料衰减更快。</li>
+<li><strong>热老化</strong>：168 h @ 70 °C 后 CLD 变化率常被规范限定在 ±20–30% 内；交联过度会变硬变脆，欠硫则松弛加剧。</li>
+<li><strong>湿度/臭氧</strong>：对 CLD 直接影响小，但表面老化会改变摩擦与贴合。</li>
 </ul>
 <h3>8. 图纸与规范怎么写</h3>
-<pre><code class="language-text">MATERIAL: EPDM, peroxide-cured, density 1.10–1.20 g/cm³
-HARDNESS: 70 ± 5 Shore A (ISO 48-4, 5-point median)
-TENSILE: ≥ 10 MPa; ELONGATION: ≥ 250% (ISO 37, Type 2 dumbbell)
-COMPRESSION SET: ≤ 25% (ISO 815, 70 h @ 70 °C, 25% compression)
-HEAT AGING: ΔHA ≤ +5 Shore A, ΔTS ≥ -15% (ISO 188, 70 h @ 100 °C)
-OZONE RESISTANCE: no cracks (ISO 1431, 50 pphm, 20% strain, 40 °C, 72 h)
-CURE: MDR 180 °C, t90 3–6 min, MH 8–12 dN·m (record only)
+<pre><code class="language-text">PERFORMANCE SPEC — SEALING PROFILE, DOOR PRIMARY SEAL
+MATERIAL: EPDM dense, 65 ± 3 Shore A, per XYZ-MAT-001
+TEST: CLD per ISO 7743 / plant spec PS-204
+SPECIMEN: full profile, L = 300 mm, ends constrained
+COMPRESSION: 25% / 50% / 75% of free height (nominal 12.0 mm)
+DWELL: 30 min at each level, reading at end of dwell
+CYCLES: cycles 1-2 conditioning, report cycle 3
+ENVIRONMENT: 23 ± 2 °C, 50 ± 5% RH, conditioning 24 h
+ACCEPTANCE:
+  25% -&gt; 18–30 N/100 mm
+  50% -&gt; 45–70 N/100 mm
+  drift after 168 h @ 70 °C: within ±25% of initial
+SAMPLE SIZE: n = 3, report median and range
 </code></pre>
+<p>写法要点：<strong>压缩率基准写清楚（自由高度还是标称高度）、试样长度写清楚、取值循环写清楚、漂移判据写清楚</strong>。这四项缺一项，供应商和实验室就会各测各的。</p>
 <h3>9. 测量与应用陷阱</h3>
 <ol>
-<li>硬度试样厚度不足 6 mm 未叠层 → 读数偏低。</li>
-<li>硬度读数时间（1 s vs 15 s）不统一 → 数据不可比。</li>
-<li>压缩永久变形夹具压缩率算错 → 结果偏差大。</li>
-<li>MDR 试样量不足 → 扭矩曲线失真。</li>
-<li>臭氧试验未预拉伸 → 裂纹不出现，误判合格。</li>
-<li>老化箱温度不均 → 局部过硫/欠硫。</li>
+<li><strong>压缩率基准混乱</strong>：按“自由高度”还是“装配后高度”算压缩率，差 1–2 mm 就足以让 CLD 差 30%。</li>
+<li><strong>试样长度不统一</strong>：100 mm 与 300 mm 试样的端部约束效应不同，折算值不可直接比。</li>
+<li><strong>未做预调理循环</strong>：第一循环含大量 Mullins 效应，读数偏高。</li>
+<li><strong>保压时间不足</strong>：30 s 读数与 30 min 读数可差 10–20%，粘弹材料尤其明显。</li>
+<li><strong>压头与断面不匹配</strong>：平板压头压异形断面会侧向鼓出，测的是“压扁”不是“压缩”。</li>
+<li><strong>只报单点</strong>：只给 25% 一点，无法判断曲线形状，装配公差稍变就失控。</li>
 </ol>
 <h3>10. 延伸到当前产品与技术方向</h3>
-<p>库博标准公开产品线中，<strong>Fortrex</strong> 轻量化密封材料、<strong>FlexiFit</strong> 与 <strong>FlexiCore</strong> 强调低压缩载荷与回弹保持，对应今天讲的“交联密度—压缩永久变形—硬度”三角平衡。工程上要把配方（过氧化物体系、抗臭氧剂）与截面设计联动，才能在轻量化同时避免变硬开裂。</p>
-<h3>自测 5 题</h3>
+<p>CLD 正在从“单一材料指标”变成“系统级设计变量”：</p>
+<ul>
+<li><strong>轻量化密实体系（如 Fortrex 类）</strong>：以热塑性弹性体/轻量密实结构替代部分海绵胶，目标是<strong>同密封力下更低 CLD 与更低重量</strong>，代价是压缩永久变形与高温漂移需重新标定。</li>
+<li><strong>集成化密封（如 FlexiFit 类）</strong>：把多个唇口、导水结构集成到一个断面，CLD 从“一个数”变成“沿断面的分布”，需要用分段夹具测局部负荷。</li>
+<li><strong>模块化/多腔结构（如 FlexiCore 类）</strong>：中空芯部改变压缩曲线形状，追求“低插入力 + 高回弹”，测试上要同时报加载与卸载曲线。</li>
+<li><strong>电动化影响</strong>：无发动机掩蔽噪声，风噪与密封力要求提高；同时关门力、玻璃升降阻力受能耗与体验约束，CLD 窗口被双向压缩——这正是 CLD 规范必须写细的原因。</li>
+</ul>
+<h3>11. 自测 5 题</h3>
 <ol>
-<li>为什么 EPDM 老化后通常变硬而不是变软？</li>
-<li>MDR 曲线中 MH 偏低可能意味着什么？</li>
-<li>压缩永久变形升高对密封性能的直接后果是什么？</li>
-<li>臭氧开裂试验为什么要预拉伸？</li>
-<li>图纸上硬度标注应包含哪些要素？</li>
+<li>CLD 的取值规则中，“前两个循环作预调理、取第三循环”是为了消除什么效应？</li>
+<li>为什么成品密封条 CLD 常用 300 mm 试样而不是 100 mm？</li>
+<li>某车门密封在 −30 °C 关门力明显变大，用 CLD 如何解释？规范上应加什么条款？</li>
+<li>同一胶料、同一硬度，把断面壁厚从 2.0 mm 减到 1.6 mm，CLD 大致如何变化？会带来什么风险？</li>
+<li>客户抱怨渗水，但常温 CLD 合格。列出两个最可能被忽略的测试或规范缺口。</li>
 </ol>
 <h3>参考答案</h3>
 <ol>
-<li>EPDM 主链饱和、双键在侧基，热氧老化时残余双键与交联点继续反应，网络交联密度上升，宏观表现为变硬、变脆；同时增塑剂迁移也会使硬度上升。</li>
-<li>MH 偏低通常表示交联密度不足，可能源于促进剂/硫化剂用量偏低、硫化温度不足、胶料批次波动或称量误差，需结合 t90 与批次记录排查。</li>
-<li>压缩永久变形升高意味着密封条在长期压缩后回弹丧失，接触压力下降，导致漏水、漏风、异响，严重时密封失效。</li>
-<li>臭氧开裂需要“臭氧 + 拉伸应力”共同作用，预拉伸使表面产生应力集中，模拟实际装配状态，否则裂纹不出现会误判合格。</li>
-<li>应包含：硬度值 ± 公差、邵氏标尺（A）、测试标准号（如 ISO 48-4）、试样厚度/叠层要求、读数时间（1 s 或 15 s）、取值规则（如 5 点中位数）。</li>
+<li>消除 <strong>Mullins 效应（应力软化）</strong> 与首次压缩的瞬时粘弹响应。首循环读数偏高、不可重复，预调理后第三循环才代表稳态压缩行为。</li>
+<li>端部约束效应。试样越短，两端夹持对中段变形的影响占比越大，测得的“每 100 mm 负荷”偏高且离散大；300 mm 使中段接近自由压缩状态，折算值更接近整车实际。</li>
+<li>低温下 EPDM 硬化，CLD 显著升高（可达常温 2–4 倍），密封条变“硬”，压缩同样位移需要更大关门力。规范应增加<strong>低温 CLD 条款</strong>（如 −30 °C 下 CLD 不超过常温的 X 倍），并与关门力（door closing effort）指标联动。</li>
+<li>壁厚减小使断面刚度下降，CLD 明显降低（近似与壁厚的高次方相关，非线性的，实际以实测为准）。风险：密封力不足、抗风噪下降、长期压缩永久变形后贴合失效；同时装配容错变大但密封裕度变小。</li>
+<li>缺口一：<strong>只测常温单点 CLD</strong>，未覆盖高温/老化后的应力松弛与 CLD 衰减，长期使用后密封力不足。缺口二：<strong>未定义压缩率基准与试样长度</strong>，或未做整车状态（含车身公差、过盈量）下的实际压缩率核算，导致名义合格、实车欠压缩。可补充：热老化后 CLD 漂移判据、整车淋雨/风洞验证条款。</li>
 </ol></body></html>
