@@ -2,8 +2,9 @@ name: daily-lesson
 
 on:
   schedule:
-    # 07:30 Asia/Shanghai = 23:30 UTC(前一天)
-    - cron: "30 23 * * *"
+    # GitHub 免费版定时实测延迟约 3 小时，
+    # 所以提前到 20:00 UTC = 北京 04:00，即使延迟 3 小时也能在 07:00 前出稿。
+    - cron: "0 20 * * *"
   workflow_dispatch:
     inputs:
       date:
