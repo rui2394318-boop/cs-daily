@@ -1,0 +1,510 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16181a" media="(prefers-color-scheme: dark)">
+<title>Day 05 · 2026-11-04｜拉伸强度、伸长率、撕裂强度</title><style>
+:root{--bg:#fbfaf7;--fg:#1c1b19;--muted:#6b6862;--line:#e2ded6;--card:#fff;
+--accent:#0a6b5f;--accent2:#b4531a;--code:#f2efe9}
+@media (prefers-color-scheme:dark){:root{--bg:#16181a;--fg:#e8e6e1;--muted:#9a968e;
+--line:#2c2f33;--card:#1e2124;--accent:#5fd3bd;--accent2:#e6a06a;--code:#24282c}}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0 auto;background:var(--bg);color:var(--fg);max-width:760px;
+font:17px/1.78 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+padding:20px 18px 72px;word-break:break-word;overflow-wrap:anywhere}
+h1{font-size:1.6em;line-height:1.35;margin:.2em 0 .8em}
+h1::after{content:"";display:block;width:46px;height:3px;margin-top:.5em;
+background:var(--accent);border-radius:2px}
+h2{font-size:1.26em;margin:2em 0 .6em;padding-top:.9em;border-top:1px solid var(--line)}
+h3{font-size:1.08em;margin:1.6em 0 .5em;color:var(--accent)}
+p{margin:.75em 0}a{color:var(--accent)}
+blockquote{margin:1em 0;padding:.7em 1em;border-left:3px solid var(--accent2);
+background:var(--card);border-radius:0 8px 8px 0;color:var(--muted)}
+ul,ol{padding-left:1.35em}li{margin:.36em 0}
+code{background:var(--code);padding:.14em .38em;border-radius:5px;
+font:.88em/1.5 ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--code);padding:14px 16px;border-radius:10px;overflow-x:auto;font-size:.86em}
+pre code{background:none;padding:0}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.1em -18px;padding:0 18px}
+table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:var(--code);font-weight:650;white-space:nowrap}
+.topbar{position:sticky;top:0;z-index:9;margin:-20px -18px 18px;padding:11px 18px;
+background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);
+border-bottom:1px solid var(--line);font-size:.92em}
+.topbar a{text-decoration:none;font-weight:600}
+.sec{margin:2.2em 0 .6em;font-size:.8em;letter-spacing:.08em;text-transform:uppercase;
+color:var(--muted);font-weight:700}
+.cards{display:grid;gap:12px;margin:.6em 0 1.4em}
+.card{display:block;padding:16px 18px;background:var(--card);border:1px solid var(--line);
+border-radius:14px;text-decoration:none;color:inherit}
+.card .d{font-size:.78em;color:var(--accent2);font-weight:600;letter-spacing:.04em}
+.card .t{font-size:1.03em;font-weight:600;margin:.35em 0 .2em;line-height:1.45}
+footer{margin-top:3em;padding-top:1.2em;border-top:1px solid var(--line);
+color:var(--muted);font-size:.82em;text-align:center}
+</style></head><body><div class="topbar"><a href="./index.html">← 返回目录</a></div><h2>Part 1 英语 25 分钟</h2>
+<h3>1. 语音热身 3min：三个高频错音</h3>
+<p>汽车行业会议里最常被听错的三个音，都集中在「词尾」和「摩擦音」上。中国人习惯把词尾辅音「吞掉」或加元音，导致 trend / trends、test / tests 这类词在电话会议里完全混在一起。</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>错在哪</th>
+<th>典型读法</th>
+<th>正确读法</th>
+<th>最小对立</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>词尾 -s / -es 复数与第三人称单数</td>
+<td>trend /tren/（吞掉 s）；tests 读成 /ˈtestɪs/</td>
+<td>trends /trendz/；tests /tests/</td>
+<td>trend — trends；test — tests</td>
+</tr>
+<tr>
+<td>/θ/ 与 /s/ 不分</td>
+<td>strength 读成 /streŋs/</td>
+<td>strength /streŋθ/</td>
+<td>strength — stress</td>
+</tr>
+<tr>
+<td>/v/ 与 /w/ 不分</td>
+<td>value 读成 /ˈwæljuː/</td>
+<td>value /ˈvæljuː/</td>
+<td>value — wally（避免混）</td>
+</tr>
+</tbody>
+</table></div>
+<p>练习方法：把 <code>trends / tests / strength / value</code> 四个词连读 10 遍，重点在词尾「收得住」——/dz/、/ts/、/θ/、/v/ 都要有明确的摩擦或爆破收尾，不要拖成元音。</p>
+<h3>2. 影子跟读 8min：两段真实场景稿</h3>
+<p><strong>稿 A：周会汇报测试结果（约 40 秒）</strong></p>
+<blockquote>
+<p>"We ran tensile tests on five samples from the new EPDM compound. Tensile strength came in at around 9.2 megapascals, which is slightly above our target. Elongation at break dropped to about 380 percent — that's lower than the previous batch, so we need to check the cure level. Tear strength stayed flat at roughly 32 kilonewtons per meter. Overall the trend is stable, but elongation is the one to watch."</p>
+</blockquote>
+<p>发音点与节奏：<br>
+- <code>ran tensile</code> 连读为 /ræn ˈtensaɪl/，n 与 t 之间不要断。<br>
+- <code>came in at</code> 三词连读，<code>at</code> 弱读为 /ət/。<br>
+- <code>slightly above</code> 中 t 与 a 连读成 /ˈslaɪtli jəˈbʌv/ 更自然，但标准读法 /əˈbʌv/ 即可，重点是重音落在 <code>bove</code>。<br>
+- <code>dropped to about</code> 中 <code>to</code> 弱读 /tə/，整句节奏是「重—轻—轻—重」。<br>
+- 数字读法：<code>9.2</code> 读 "nine point two"，<code>380 percent</code> 重读 <code>three eighty</code>，<code>percent</code> 轻收。</p>
+<p><strong>稿 B：客户电话里描述趋势（约 35 秒）</strong></p>
+<blockquote>
+<p>"Looking at the last three months, compression set has been creeping up — from 18 percent to 22 percent. It's not a spike, more of a gradual rise. We've plateaued on the sealing force side, which is good news. If the trend continues, we'll need to revisit the compound. Can you send over the raw data so we can look at the curve together?"</p>
+</blockquote>
+<p>发音点与节奏：<br>
+- <code>creeping up</code> 连读 /ˈkriːpɪŋ ʌp/，<code>up</code> 不弱读到消失。<br>
+- <code>more of a</code> 连读 /mɔːr əv ə/，三个词几乎一个音节群。<br>
+- <code>plateaued</code> /plæˈtoʊd/，重音在第二音节，词尾 /d/ 轻收。<br>
+- <code>send over</code> 连读 /senˈdoʊvər/，d 与 o 之间加轻微 /j/ 更顺。<br>
+- 节奏：<code>It's not a spike</code> 快读，<code>more of a gradual rise</code> 放慢并重读 <code>gradual</code>。</p>
+<h3>3. 功能句 6 组 6min：描述趋势</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>直接版</th>
+<th>委婉版</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据上升</td>
+<td>Tensile strength went up 8%.</td>
+<td>We're seeing an upward trend in tensile strength, about 8%.</td>
+</tr>
+<tr>
+<td>数据下降</td>
+<td>Elongation dropped 15%.</td>
+<td>Elongation has come down somewhat — roughly 15%.</td>
+</tr>
+<tr>
+<td>进入平台期</td>
+<td>It's flat now.</td>
+<td>It seems to have plateaued for the moment.</td>
+</tr>
+<tr>
+<td>波动</td>
+<td>It's jumping around.</td>
+<td>It's been fluctuating within a narrow band.</td>
+</tr>
+<tr>
+<td>趋势持续</td>
+<td>It keeps rising.</td>
+<td>The trend appears to be continuing.</td>
+</tr>
+<tr>
+<td>趋势反转</td>
+<td>It turned around.</td>
+<td>We may be seeing the start of a reversal.</td>
+</tr>
+</tbody>
+</table></div>
+<h3>4. 词汇 12 个 6min</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>词</th>
+<th>音标</th>
+<th>释义</th>
+<th>搭配</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>trend</td>
+<td>/trend/</td>
+<td>趋势</td>
+<td>upward / downward trend</td>
+</tr>
+<tr>
+<td>plateau</td>
+<td>/plæˈtoʊ/</td>
+<td>平台期、趋于平稳</td>
+<td>reach a plateau</td>
+</tr>
+<tr>
+<td>fluctuate</td>
+<td>/ˈflʌktʃueɪt/</td>
+<td>波动</td>
+<td>fluctuate between A and B</td>
+</tr>
+<tr>
+<td>gradual</td>
+<td>/ˈɡrædʒuəl/</td>
+<td>渐进的</td>
+<td>gradual rise / decline</td>
+</tr>
+<tr>
+<td>spike</td>
+<td>/spaɪk/</td>
+<td>尖峰、突增</td>
+<td>a spike in demand</td>
+</tr>
+<tr>
+<td>dip</td>
+<td>/dɪp/</td>
+<td>小幅下跌</td>
+<td>a slight dip</td>
+</tr>
+<tr>
+<td>stabilize</td>
+<td>/ˈsteɪbəlaɪz/</td>
+<td>稳定</td>
+<td>stabilize at</td>
+</tr>
+<tr>
+<td>margin</td>
+<td>/ˈmɑːrdʒɪn/</td>
+<td>余量、裕度</td>
+<td>safety margin</td>
+</tr>
+<tr>
+<td>baseline</td>
+<td>/ˈbeɪslaɪn/</td>
+<td>基线</td>
+<td>against the baseline</td>
+</tr>
+<tr>
+<td>deviation</td>
+<td>/ˌdiːviˈeɪʃn/</td>
+<td>偏差</td>
+<td>deviation from spec</td>
+</tr>
+<tr>
+<td>extrapolate</td>
+<td>/ɪkˈstræpəleɪt/</td>
+<td>外推</td>
+<td>extrapolate from data</td>
+</tr>
+<tr>
+<td>inflection point</td>
+<td>/ɪnˈflekʃn pɔɪnt/</td>
+<td>拐点</td>
+<td>reach an inflection point</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>词根专栏：-tend / -tens（拉伸）</strong><br>
+- <code>tensile</code>（拉伸的）、<code>tension</code>（张力）、<code>extend</code>（延伸）、<code>tendon</code>（腱）同源，核心义「拉紧」。<br>
+- 记忆链：拉紧 → 张力 → 拉伸强度 → 伸长。产品专题里 tensile strength、elongation 都从这条词根长出来。</p>
+<h3>5. 场景对话 4min</h3>
+<p>A: How did the latest batch look on tensile?<br>
+B: Solid — 9.4 MPa, a bit above the baseline.<br>
+A: And elongation?<br>
+B: That's where it gets interesting. It dipped to 360 percent, then plateaued.<br>
+A: So we're trading elongation for strength.<br>
+B: Looks that way. The trend's been gradual over three batches.<br>
+A: Any spike in tear strength?<br>
+B: No, it's been flat — around 32 kN/m.<br>
+A: Okay, let's flag the elongation dip and check cure level.</p>
+<p>地道表达：<code>That's where it gets interesting</code>（问题就在这里）、<code>trading A for B</code>（以 A 换 B）、<code>Looks that way</code>（看起来是这样）、<code>flag the dip</code>（把下跌标出来）。</p>
+<h3>6. 输出任务 2min</h3>
+<ol>
+<li>用手机录 60 秒：描述你手上任一组测试数据的三批趋势，必须用到 <code>trend / plateau / dip / gradual</code> 四个词，回听检查词尾 -s 是否读出来。</li>
+<li>写 3 个句子：各用 <code>upward trend</code>、<code>plateaued at</code>、<code>a slight dip in</code>，写在笔记本上，明天早会前读一遍。</li>
+</ol>
+<hr>
+<h2>Part 2 产品专题 25 分钟：拉伸强度、伸长率、撕裂强度</h2>
+<h3>1. 一句话定义与图纸位置</h3>
+<ul>
+<li><strong>拉伸强度（tensile strength）</strong>：试样拉伸至断裂时单位原始截面积承受的最大应力，单位 MPa。表征材料「抗拉断」的能力。</li>
+<li><strong>伸长率（elongation at break）</strong>：断裂时标距的伸长量占原始标距的百分比，单位 %。表征材料「能被拉多长」。</li>
+<li><strong>撕裂强度（tear strength）</strong>：预制切口试样撕裂扩展所需的最大力除以试样厚度，单位 kN/m。表征材料「抗裂口扩展」的能力。</li>
+</ul>
+<p>在图纸上，三者通常写在材料标注行或材料规范引用里，例如 <code>EPDM, 70 Shore A, per ASTM D2000 M2BA710</code>，具体数值由材料规范（material spec）承载，图纸只引标准号与材料等级，不直接堆数值。</p>
+<h3>2. 怎么测</h3>
+<p><strong>拉伸（tensile）</strong><br>
+- 标准：ASTM D412（美系）、ISO 37（国际/欧系）。<br>
+- 设备：万能拉力机（universal testing machine），配 500 N 或 1 kN 载荷传感器。<br>
+- 试样：哑铃形（dumbbell）Die C，标距 25 mm；或环形试样（ring）。<br>
+- 环境：标准实验室 23±2 °C，相对湿度 50±5%，试样调节至少 16 h（薄件可短）。<br>
+- 速度：500 mm/min（D412 Die C 常用）。<br>
+- 读数：拉伸强度取最大应力；伸长率取断裂时标距伸长百分比；同时记录 100% / 200% 定伸应力（modulus）。<br>
+- 取值规则：一般 5 个试样取中位数（median），剔除明显滑脱或端部断裂的无效样。</p>
+<p><strong>撕裂（tear）</strong><br>
+- 标准：ASTM D624（Die B 裤形 / Die C 直角形）、ISO 34-1。<br>
+- 试样：带预制切口的直角形或裤形（trouser）试样。<br>
+- 速度：500 mm/min。<br>
+- 读数：取撕裂过程中的最大力，除以试样厚度得 kN/m；同样取 5 样中位数。</p>
+<h3>3. 参数族 / 标尺对比表</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>单位</th>
+<th>表征</th>
+<th>典型标准</th>
+<th>试样</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>拉伸强度</td>
+<td>MPa</td>
+<td>抗拉断能力</td>
+<td>D412 / ISO 37</td>
+<td>哑铃 C</td>
+</tr>
+<tr>
+<td>定伸应力 100%/200%</td>
+<td>MPa</td>
+<td>刚度、回弹倾向</td>
+<td>D412</td>
+<td>哑铃 C</td>
+</tr>
+<tr>
+<td>断裂伸长率</td>
+<td>%</td>
+<td>柔韧、可变形量</td>
+<td>D412 / ISO 37</td>
+<td>哑铃 C</td>
+</tr>
+<tr>
+<td>撕裂强度</td>
+<td>kN/m</td>
+<td>抗裂口扩展</td>
+<td>D624 / ISO 34-1</td>
+<td>直角/裤形</td>
+</tr>
+<tr>
+<td>硬度</td>
+<td>Shore A</td>
+<td>综合刚度</td>
+<td>D2240</td>
+<td>块状</td>
+</tr>
+</tbody>
+</table></div>
+<h3>4. 典型值表（工程参考，非规范）</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>部位</th>
+<th>材料</th>
+<th>拉伸强度 MPa</th>
+<th>伸长率 %</th>
+<th>撕裂 kN/m</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>车门密封条密实胶</td>
+<td>EPDM 70A</td>
+<td>8–12</td>
+<td>300–450</td>
+<td>25–40</td>
+</tr>
+<tr>
+<td>玻璃导槽（glass run）</td>
+<td>EPDM 65A</td>
+<td>7–10</td>
+<td>350–500</td>
+<td>20–35</td>
+</tr>
+<tr>
+<td>海绵胶密封（sponge）</td>
+<td>EPDM 海绵</td>
+<td>1.5–3.5</td>
+<td>150–300</td>
+<td>3–8</td>
+</tr>
+<tr>
+<td>天窗密封</td>
+<td>EPDM 60A</td>
+<td>8–11</td>
+<td>400–550</td>
+<td>22–35</td>
+</tr>
+<tr>
+<td>内饰 TPU 包边</td>
+<td>TPU 85A</td>
+<td>25–40</td>
+<td>400–600</td>
+<td>40–70</td>
+</tr>
+</tbody>
+</table></div>
+<h3>5. 参数升高/降低的连锁影响</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>变化</th>
+<th>直接后果</th>
+<th>下游影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>拉伸强度↑</td>
+<td>抗拉断能力增强</td>
+<td>硬度/定伸可能上升，压缩永久变形变差，装配力增大</td>
+</tr>
+<tr>
+<td>拉伸强度↓</td>
+<td>易拉断、易损伤</td>
+<td>装配破损率上升，耐久后开裂风险</td>
+</tr>
+<tr>
+<td>伸长率↑</td>
+<td>更柔韧、易装配</td>
+<td>定伸偏低，回弹不足，密封力下降</td>
+</tr>
+<tr>
+<td>伸长率↓</td>
+<td>偏脆</td>
+<td>低温或装配时开裂，弯角处应力集中</td>
+</tr>
+<tr>
+<td>撕裂强度↑</td>
+<td>抗裂口扩展好</td>
+<td>通常伴随硬度上升，压缩变形变差</td>
+</tr>
+<tr>
+<td>撕裂强度↓</td>
+<td>切口易扩展</td>
+<td>装配划伤后快速撕裂，售后抱怨</td>
+</tr>
+</tbody>
+</table></div>
+<p>核心矛盾：强度/撕裂与柔韧/回弹是此消彼长的，配方设计就是在二者之间找平衡点。</p>
+<h3>6. 配方与设计杠杆</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>杠杆</th>
+<th>拉伸强度</th>
+<th>伸长率</th>
+<th>撕裂强度</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>补强填料（炭黑 N550/N660）↑</td>
+<td>↑</td>
+<td>↓</td>
+<td>↑（到一定程度后↓）</td>
+<td>过量补强撕裂反降</td>
+</tr>
+<tr>
+<td>油/增塑剂↑</td>
+<td>↓</td>
+<td>↑</td>
+<td>↓</td>
+<td>软化、易加工</td>
+</tr>
+<tr>
+<td>交联密度↑</td>
+<td>↑</td>
+<td>↓</td>
+<td>先↑后↓</td>
+<td>过硫撕裂下降</td>
+</tr>
+<tr>
+<td>聚合物分子量↑</td>
+<td>↑</td>
+<td>↑</td>
+<td>↑</td>
+<td>综合最优但加工变难</td>
+</tr>
+<tr>
+<td>生胶门尼↑</td>
+<td>↑</td>
+<td>略↓</td>
+<td>↑</td>
+<td>挤出表面改善</td>
+</tr>
+<tr>
+<td>结构设计：圆角半径↑</td>
+<td>—</td>
+<td>—</td>
+<td>有效抗撕裂↑</td>
+<td>避免尖角应力集中</td>
+</tr>
+</tbody>
+</table></div>
+<h3>7. 温度/时间/老化漂移</h3>
+<ul>
+<li><strong>低温</strong>：EPDM 玻璃化转变附近伸长率骤降，-40 °C 下伸长率可能只剩常温的 30–50%，撕裂强度下降，弯折易裂。</li>
+<li><strong>高温老化</strong>：交联继续（后硫化），拉伸强度可能略升、伸长率明显下降，硬度上升 3–5 Shore A，压缩永久变形变差。</li>
+<li><strong>热氧/臭氧</strong>：表面龟裂，撕裂强度对表面缺陷极敏感，老化后切口扩展加快。</li>
+<li><strong>湿热</strong>：部分配方水解或抽出，伸长率下降。</li>
+</ul>
+<p>判定漂移时一定以「老化前后对比」呈现，而不是单点值。</p>
+<h3>8. 图纸与规范怎么写</h3>
+<pre><code class="language-text">MATERIAL: EPDM, 70 ± 5 Shore A, black
+SPEC: ASTM D2000 M2BA710 (or Cooper Standard internal MS-xxxx)
+TENSILE STRENGTH: ≥ 8.0 MPa (ASTM D412, Die C, 500 mm/min, median of 5)
+ELONGATION AT BREAK: ≥ 300% (ASTM D412)
+TEAR STRENGTH: ≥ 25 kN/m (ASTM D624 Die B)
+HEAT AGING: 70 h @ 100°C, Δ tensile ≤ -15%, Δ elongation ≤ -30%, Δ hardness ≤ +10
+LOW TEMP: Brittleness -40°C, no failure (ASTM D2137)
+</code></pre>
+<p>要点：标准号 + 试样 + 速度 + 取值规则（median of 5）四件套写全，否则供应商各测各的，数据不可比。</p>
+<h3>9. 测量与应用陷阱</h3>
+<ol>
+<li><strong>试样滑脱</strong>：夹具夹持力不足，断裂在端部，数据偏低——必须剔除端部断裂样。</li>
+<li><strong>切口不规范</strong>：撕裂试样切口深度/角度偏差，结果散布大，须用标准裁刀。</li>
+<li><strong>速度不一致</strong>：D412 与 ISO 37 速度不同，跨标准比较无效。</li>
+<li><strong>厚度测量点</strong>：撕裂强度按厚度归一，厚度测量位置不同结果差 5–10%。</li>
+<li><strong>取平均而非中位数</strong>：一个异常高值拉高均值，掩盖真实水平，规范应写 median。</li>
+<li><strong>只测常温</strong>：密封件实际工作在 -40 到 +120 °C，必须补低温与热老化数据。</li>
+</ol>
+<h3>10. 延伸到当前产品与技术方向</h3>
+<p>库博标准的 Fortrex 轻量化密封材料、FlexiFit 与 FlexiCore 等产品线，本质上都在「强度—柔韧—重量」三角里做取舍：轻量化海绵/TPV 体系往往牺牲部分撕裂强度换取减重与低压缩力，因此规范里必须同步收紧撕裂下限与低温伸长要求。做这些项目时，拉伸/伸长/撕裂三项要和压缩永久变形、压缩负荷（CLD）一起看，单看一项会误判。</p>
+<h3>11. 自测 5 题</h3>
+<ol>
+<li>拉伸强度与断裂伸长率分别用什么单位？各自表征什么？</li>
+<li>ASTM D412 与 ISO 37 的主要差别在哪，为什么不能混用数据？</li>
+<li>为什么补强填料加到一定程度后撕裂强度反而下降？</li>
+<li>图纸材料标注里「median of 5」这个取值规则为什么必须写？</li>
+<li>低温下伸长率骤降对密封件装配有什么实际风险？</li>
+</ol>
+<h3>参考答案</h3>
+<ol>
+<li>拉伸强度单位 MPa，表征材料抗拉断能力；断裂伸长率单位 %，表征材料断裂前可变形量（柔韧程度）。</li>
+<li>两者试样几何（哑铃尺寸）、拉伸速度、标距规定不同，同一材料按不同标准测得数值有差异，跨标准直接比较会得出错误结论，必须同标准同条件对比。</li>
+<li>填料过量导致填料网络聚集、应力集中点增多，裂口沿填料团聚处快速扩展，同时交联与油体系平衡被打破，撕裂强度出现峰值后下降。</li>
+<li>因为橡胶测试数据散布较大，单个异常值会显著拉高或拉低均值；写 median of 5 可统一取值规则，保证供应商与客户数据可比、判定一致。</li>
+<li>低温伸长率骤降使材料变脆，装配弯折、卡扣压入时易开裂，尤其弯角与切口处应力集中，导致装配破损率上升和早期失效。</li>
+</ol></body></html>
