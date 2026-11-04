@@ -11,6 +11,10 @@ on:
         description: "补发指定日期，格式 2026-11-01；留空=今天"
         required: false
         default: ""
+      news_only:
+        description: "只重写每日新闻、不动学习包，填 1 生效"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -38,6 +42,7 @@ jobs:
           PUSH_WEBHOOK: ${{ secrets.PUSH_WEBHOOK }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           FORCE_DATE: ${{ inputs.date }}
+          NEWS_ONLY: ${{ inputs.news_only }}
         run: python daily.py
 
       - name: Commit site

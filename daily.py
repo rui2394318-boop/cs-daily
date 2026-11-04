@@ -102,7 +102,7 @@ def sina_flash(limit: int = 14) -> list[str]:
 
 
 def google_news(query: str, limit: int = 8) -> list[str]:
-    """行业标题（只有标题，没有正文），用于补汽车/密封这类垂直话题。"""
+    """通用新闻标题（只有标题，没有正文），用于补快讯源漏掉的大事件。"""
     url = (
         "https://news.google.com/rss/search?q="
         + urllib.parse.quote(query)
@@ -118,6 +118,32 @@ def google_news(query: str, limit: int = 8) -> list[str]:
         title = (item.findtext("title") or "").strip()
         if title:
             out.append(f"- {title}")
+        if len(out) >= limit:
+            break
+    return out
+
+
+def rss_feed(url: str, limit: int = 8) -> list[str]:
+    """国际媒体 RSS（标题 + 摘要）。
+
+    部分源在某些网络下不通（国内直连 BBC/纽时会被墙，
+    GitHub 美国机房通常可以），所以单次尝试 + 短超时，失败就跳过。
+    """
+    try:
+        req = urllib.request.Request(url, headers=UA)
+        with urllib.request.urlopen(req, timeout=10) as r:
+            raw = r.read()
+        root = ET.fromstring(raw)
+    except Exception as exc:
+        print(f"[news] rss 失败 {url}: {exc}", file=sys.stderr)
+        return []
+    out = []
+    for item in root.iter("item"):
+        title = (item.findtext("title") or "").strip()
+        if not title:
+            continue
+        desc = _clean(item.findtext("description") or "", 140)
+        out.append(f"- {title}｜{desc}" if desc else f"- {title}")
         if len(out) >= limit:
             break
     return out
@@ -178,10 +204,9 @@ SYSTEM_LESSON = """你是一位资深汽车密封系统工程师，同时是英�
 写作要求：中文讲解、英文术语并列；专业、具体、可执行；不说空话套话。
 只输出 Markdown 正文，不要任何前言或说明。"""
 
-SYSTEM_NEWS = """你是一位兼做行业分析的财经编辑，长期跟踪汽车零部件与密封系统行业。
-你为「库博标准（Cooper Standard）密封系统产品开发培训生」写每日新闻简报。
-读者只有 5 分钟，所以每条都要说清"发生了什么"，不要让他再去点原文。
-事实与判断严格分开，判断要有因果链和可验证的观察指标。
+SYSTEM_NEWS = """你是一位见多识广的新闻编辑兼评论员，长期观察国际政治、科技与商业、金融市场。
+你为读者写每日新闻简报：事实准确、交代清楚、分析有洞察并且有分寸。
+不喊口号，不说正确的废话，不给任何职业或学习建议。
 只输出 Markdown 正文，不要任何前言或说明。"""
 
 
@@ -219,15 +244,14 @@ def build_lesson_prompt(day_no: int, date: dt.date, en_focus: str, product_topic
 所有英文术语首次出现给中文。"""
 
 
-def build_news_prompt(date: dt.date, product_topic: str,
-                      feeds: dict[str, list[str]], quotes: list[str]) -> str:
+def build_news_prompt(date: dt.date, feeds: dict[str, list[str]], quotes: list[str]) -> str:
     blocks = []
     for k, v in feeds.items():
         blocks.append(f"### 素材：{k}\n" + ("\n".join(v) if v else "- 未获取到"))
     material = "\n\n".join(blocks)
     quote_text = "、".join(quotes) if quotes else "未获取到"
 
-    return f"""今天是 {date:%Y-%m-%d}。读者是库博标准密封系统产品开发培训生，今天他的专业主题是「{product_topic}」。
+    return f"""今天是 {date:%Y-%m-%d}。读者想花 5 分钟搞清楚这两天世界上发生了什么重要的事。
 
 # 素材（只能使用这些内容，禁止编造数字、禁止补充素材里没有的事实）
 
@@ -240,26 +264,25 @@ def build_news_prompt(date: dt.date, product_topic: str,
 
 第一行固定为：`# 每日新闻 · {date:%Y-%m-%d}`
 
-然后：
-
 ## 今日三件事
 3 条，每条一句话说清「发生了什么」，按重要性排序。
 
-## 世界 / ## 中国 / ## 行业 / ## 市场
+## 世界 / ## 中国 / ## 科技与商业 / ## 市场
 每块 2–3 条。每条用这个格式：
 
 ### 一句话标题
 **是什么事**：1–2 句，把事实讲完整，让读者不点原文也知道发生了什么。有数字就写数字，有来源就标来源。
-**我的理解**：1–2 句。为什么重要、会传导到哪里、该盯什么指标。
+**我的理解**：2–3 句，纯粹是你对这件事本身的判断——为什么重要、会往哪里传导、有什么反直觉的地方、接下来该看什么。
 
 ## 一句话总结
-用一句话说清今天最该记住的趋势。
+用一句话说清今天最该记住的是什么。
 
 # 硬性规则
-- 总条数 9–12 条，总长度 1100–1500 字，控制在 5–6 分钟能读完。
-- 优先选重要的：宏观政策、地缘冲突、汽车与零部件、原材料价格、龙头公司动向、市场异动。
-- 素材是完整正文的，可以放心写细节；素材只有标题的（汽车行业那组），**只写标题能确定的信息**，标题看不懂就整条略过，不要猜。
-- 「我的理解」必须标注为判断，不能与事实混在一起。
+- 总条数 10–13 条，总长度 1300–1700 字，控制在 5–6 分钟能读完。
+- 选题只看重要性：地缘冲突、政策转向、重大经济数据、科技突破、大公司动向、市场异动、重大社会事件。**挑真正影响很多人的事，不要挑“和某个行业相关”的事。**
+- 「我的理解」只谈这件事本身：因果、二阶影响、反常识之处、该盯什么。**不要往任何职业、行业或岗位上靠，不要给学习或工作建议。**
+- 素材是完整正文的可以写细节；只有标题的（国际要闻、科技那两组），只写标题能确定的信息，看不懂就整条略过，不要猜。
+- 判断必须与事实分开，标注清楚。
 - 不要输出链接，读者不需要点进去。"""
 
 
@@ -438,29 +461,35 @@ def main() -> None:
         day_no = 1
     en_focus, product_topic = topic_for(day_no)
 
-    print(f"[gen] Day {day_no} {today} · {product_topic}")
-    lesson = call_llm(build_lesson_prompt(day_no, today, en_focus, product_topic),
-                      SYSTEM_LESSON, 8192)
+    news_only = os.environ.get("NEWS_ONLY", "").strip() == "1"
+    lesson_stem = f"{today:%Y-%m-%d}-Day{day_no:02d}-lesson"
+
+    if news_only and (DOCS / f"{lesson_stem}.md").exists():
+        lesson = (DOCS / f"{lesson_stem}.md").read_text(encoding="utf-8")
+        print("[gen] 仅更新新闻，沿用已有的学习包")
+    else:
+        print(f"[gen] Day {day_no} {today} · {product_topic}")
+        lesson = call_llm(build_lesson_prompt(day_no, today, en_focus, product_topic),
+                          SYSTEM_LESSON, 8192)
 
     feeds = {
         "全球快讯（正文完整）": wallstreetcn("global-channel", 10),
-        "中国财经快讯（正文完整）": sina_flash(14),
+        "中国快讯（正文完整）": sina_flash(14),
         "美股与海外市场（正文完整）": wallstreetcn("us-stock-channel", 6),
-        "汽车行业标题（只有标题）": google_news("汽车 新能源 产销 乘用车 when:3d", 8),
-        "密封与零部件标题（只有标题）": google_news("汽车零部件 OR 橡胶 OR 密封 when:7d", 5),
+        "国际要闻（标题+摘要）": rss_feed("https://feeds.bbci.co.uk/zhongwen/simp/rss.xml", 8),
+        "全球要闻（标题+摘要）": rss_feed("https://cn.nytimes.com/rss/", 6),
+        "综合要闻（只有标题）": google_news("国际要闻 when:2d", 8),
+        "科技与商业（只有标题）": google_news("科技 OR 人工智能 OR 芯片 when:2d", 8),
     }
     quotes = market_quotes()
 
     print("[gen] 每日新闻")
-    bulletin = call_llm(build_news_prompt(today, product_topic, feeds, quotes),
-                        SYSTEM_NEWS, 5000)
+    bulletin = call_llm(build_news_prompt(today, feeds, quotes), SYSTEM_NEWS, 5000)
     if "一句话总结" not in bulletin:  # 兜底：输出被截断就重试一次
         print("[retry] 新闻输出不完整，重试", file=sys.stderr)
-        bulletin = call_llm(build_news_prompt(today, product_topic, feeds, quotes),
-                            SYSTEM_NEWS, 5000)
+        bulletin = call_llm(build_news_prompt(today, feeds, quotes), SYSTEM_NEWS, 5000)
 
     DOCS.mkdir(exist_ok=True)
-    lesson_stem = f"{today:%Y-%m-%d}-Day{day_no:02d}-lesson"
     news_stem = f"{today:%Y-%m-%d}-news"
     lesson_title = f"Day {day_no:02d} · {today:%Y-%m-%d}｜{product_topic}"
     news_title = f"每日新闻 · {today:%Y-%m-%d}"
