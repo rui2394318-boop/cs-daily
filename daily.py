@@ -222,6 +222,7 @@ def build_english_prompt(day_no: int, date: dt.date, theme: str, theme_desc: str
 - 目标不是考试，是**能和外国人无障碍交流**。
 
 写五部分，Markdown 格式，表格用标准 Markdown 表格。
+第一行固定为：`# 英语 · {date:%Y-%m-%d}｜{theme}`
 
 ## Part 1 今日词汇 24 个（10 分钟）
 一个表格，列为：词 / 音标 / 词性 / 释义 / 常用搭配。
