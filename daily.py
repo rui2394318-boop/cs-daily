@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
-"""库博标准 · 每日学习包 · 云端版
+"""每日英语 + 每日新闻 + 每周密封专题 · 云端版
 
-每天在 GitHub Actions 上运行，输出**两份独立文档**：
+每天在 GitHub Actions 上运行：
 
-  1. 学习包（英语 25 分钟 + 产品专题 25 分钟）
-  2. 每日新闻（5–6 分钟读完，每条自带「是什么事」+「我的理解」）
-
-新闻事实来自快讯接口的正文（新浪 7x24、华尔街见闻），
-所以不需要点进原文就能知道发生了什么。
+  1. 英语（每天）：24 个专业/会议词汇、8 组句式、6 个连词、
+     法国口音听力训练、输出任务
+  2. 每日新闻（每天）：只挑重要的，事实自带，不需要点原文
+  3. 密封系统专题（每周日）：一次讲透一个主题
 
 环境变量：
   DEEPSEEK_API_KEY  必填
   PUSH_WEBHOOK      选填，群机器人地址
   GITHUB_REPOSITORY 由 Actions 提供，用来拼站点地址
   FORCE_DATE        选填，补发指定日期 YYYY-MM-DD
+  NEWS_ONLY         选填，填 1 时只重写新闻
 """
 
 from __future__ import annotations
@@ -31,7 +31,7 @@ from pathlib import Path
 
 import markdown
 
-from curriculum import topic_for
+from curriculum import sealing_topic_for, theme_for, word_zone_for
 
 ROOT = Path(__file__).resolve().parent
 DOCS = ROOT / "docs"
@@ -46,7 +46,7 @@ UA = {"User-Agent": "Mozilla/5.0 (compatible; CS-Daily-Lesson/1.0)"}
 def _get(url: str, headers: dict | None = None, timeout: int = 25) -> bytes:
     req = urllib.request.Request(url, headers={**UA, **(headers or {})})
     last = None
-    for _ in range(3):  # 偶发 SSL / 5xx 重试
+    for _ in range(3):
         try:
             with urllib.request.urlopen(req, timeout=timeout) as r:
                 return r.read()
@@ -124,11 +124,7 @@ def google_news(query: str, limit: int = 8) -> list[str]:
 
 
 def rss_feed(url: str, limit: int = 8) -> list[str]:
-    """国际媒体 RSS（标题 + 摘要）。
-
-    部分源在某些网络下不通（国内直连 BBC/纽时会被墙，
-    GitHub 美国机房通常可以），所以单次尝试 + 短超时，失败就跳过。
-    """
+    """国际媒体 RSS（标题 + 摘要）。单次尝试，失败就跳过。"""
     try:
         req = urllib.request.Request(url, headers=UA)
         with urllib.request.urlopen(req, timeout=10) as r:
@@ -168,7 +164,7 @@ def _yahoo(sym: str, name: str) -> str | None:
     # 基准价：盘中 → 用上一根日线收盘；已收盘 → 用倒数第二根收盘
     base = None
     if closes:
-        tol = max(1e-6, abs(closes[-1]) * 1e-5)  # 容差：避免浮点误差误判为盘中
+        tol = max(1e-6, abs(closes[-1]) * 1e-5)
         if abs(price - closes[-1]) > tol:
             base = closes[-1]
         elif len(closes) >= 2:
@@ -183,7 +179,6 @@ def _yahoo(sym: str, name: str) -> str | None:
 
 
 def market_quotes() -> list[str]:
-    """A 股指数 + 美股 + 库博标准。数据源 Yahoo Finance。"""
     targets = [
         ("000001.SS", "上证指数"),
         ("399001.SZ", "深证成指"),
@@ -197,11 +192,11 @@ def market_quotes() -> list[str]:
     return [q for q in (_yahoo(s, n) for s, n in targets) if q]
 
 
-# ---------------------------------------------------------------- 生成
+# ---------------------------------------------------------------- 提示词
 
-SYSTEM_LESSON = """你是一位资深汽车密封系统工程师，同时是英语教练。
-你为「库博标准（Cooper Standard）密封系统产品开发培训生」写每日学习包。
-写作要求：中文讲解、英文术语并列；专业、具体、可执行；不说空话套话。
+SYSTEM_ENGLISH = """你是一位英语母语者出身的商务英语教练，专攻「带口音的英语听力」和「职场口头表达」。
+学生是汽车零部件行业的中国工程师，老板是法国人，需要高频用 Teams 和面对面沟通。
+你的教学极其具体：给能直接背下来用的句子，而不是语法概念。
 只输出 Markdown 正文，不要任何前言或说明。"""
 
 SYSTEM_NEWS = """你是一位见多识广的新闻编辑兼评论员，长期观察国际政治、科技与商业、金融市场。
@@ -209,39 +204,86 @@ SYSTEM_NEWS = """你是一位见多识广的新闻编辑兼评论员，长期观
 不喊口号，不说正确的废话，不给任何职业或学习建议。
 只输出 Markdown 正文，不要任何前言或说明。"""
 
+SYSTEM_SEALING = """你是一位资深汽车密封系统工程师，经历过完整的产品开发周期。
+你写的东西必须工程准确：给出标准号、压头几何、试样尺寸、读数方式这类可核对的细节。
+只输出 Markdown 正文，不要任何前言或说明。"""
 
-def build_lesson_prompt(day_no: int, date: dt.date, en_focus: str, product_topic: str) -> str:
+
+def build_english_prompt(day_no: int, date: dt.date, theme: str, theme_desc: str,
+                         word_zone: str) -> str:
     return f"""今天是 {date:%Y-%m-%d}，第 {day_no} 天。
 
-今天的英语重点：{en_focus}
-今天的产品专题：{product_topic}
+今天的沟通场景：{theme}（{theme_desc}）
+今天的词汇取材：{word_zone}
 
-写下面两部分，Markdown 格式，表格用标准 Markdown 表格。
+学生情况（写的时候时刻想着他）：
+- 汽车密封系统产品开发培训生，日常要和法国老板用 Teams 开会，也常面对面；
+- 老板是法国人，口音很重，他经常听不懂；
+- 目标不是考试，是**能和外国人无障碍交流**。
 
-## Part 1 英语 25 分钟
-1. 语音热身 3min：三个中国人常见错音 + 最小对立练习（表格：错在哪 / 典型读法 / 正确读法 / 最小对立）。
-2. 影子跟读 8min：两段真实工作场景稿（各 30–60 秒英文原文），逐条给发音点、连读弱读、节奏。
-3. 功能句 6 组 6min：表格，列为「场景 / 直接版 / 委婉版」。
-4. 词汇 12 个 6min：表格，列为「词 / 音标 / 释义 / 搭配」，再给一个词族或词根词缀专栏。
-5. 场景对话 4min：6–8 轮 A/B 对话，标出地道表达。
-6. 输出任务 2min：要具体可检查（录音 + 写句子）。
+写五部分，Markdown 格式，表格用标准 Markdown 表格。
 
-## Part 2 产品专题 25 分钟：{product_topic}
-必须按这个骨架讲到底：
-1. 一句话定义与它在图纸上的位置
-2. 怎么测：标准号、设备/压头几何、试样、环境、读数方式、取值规则
+## Part 1 今日词汇 24 个（10 分钟）
+一个表格，列为：词 / 音标 / 词性 / 释义 / 常用搭配。
+- 16 个来自「{word_zone}」，8 个来自会议与职场沟通。
+- 音标统一用一种体系（英式或美式），标注重音符号。
+- 不要放 seal / meeting / report 这种太基础的词，除非它的搭配容易被用错。
+- 表格后面挑 6 个最容易用错的词，各给一句真实工作场景的例句，并说明中国人常犯的错。
+
+## Part 2 常用句式 8 组（5 分钟）
+表格，列为：场景 / 直接版 / 委婉版。
+场景要贴着他今天的主题「{theme}」和真实工作：汇报、提问、澄清、打断、争取时间、拒绝、确认、收尾。
+
+## Part 3 连词与连接词 6 个（4 分钟）
+表格，列为：连词 / 作用 / 例句 / 中国人常犯的错。
+挑真正能提升口语连贯度的（比如 however / whereas / therefore / as long as / unless / due to / despite / in terms of / given that），不要放 and / but / so。
+最后用 3 句话示范：把三个短句用连词串成一段连贯的汇报。
+
+## Part 4 法国口音听力训练（8 分钟，重点）
+
+### 4.1 法国人说英语的发音特征
+表格，列为：特征 / 他会说成 / 你要听成 / 例子。
+至少 5 条，覆盖：h 音脱落与乱加、th 变 s/z、词尾重音、/r/ 小舌音、/ɪ/ 与 /iː/ 不分、-ing 读成 -ingg、v/w 混淆、词尾辅音、数字读法（fifteen / fifty）。
+
+### 4.2 三个高频句的「他说的 → 你听的」对照
+每条写出：原句 → 他大概会怎么说（用字母模拟发音）→ 你怎么在脑子里还原。
+句子要真实，例如他在会上说 "I think we have a problem with the hardness on the B-pillar"。
+
+### 4.3 假朋友（faux amis）
+表格：他会用的词 / 他其实想表达 / 你要怎么理解。
+至少 4 条，例如 actually≠actuellement、eventually、assist、delay、control、formation、sensible。
+
+### 4.4 一段模拟对话
+8–10 轮，法国老板 vs 你。老板的台词要带口音标注（括号里写标准发音），
+你的台词要示范「没听清时怎么优雅地让他重复」。
+
+## Part 5 输出任务（2 分钟）
+2 条具体任务：一条必须开口录音（给要念的句子），一条必须写（3–5 句）。
+检查点写清楚，能自己判断做没做到。
+
+长度：正文 2600–3400 字，必须完整写完 Part 5，不得中途截断。
+英文术语首次出现给中文。"""
+
+
+def build_sealing_prompt(date: dt.date, week_no: int, topic: str) -> str:
+    return f"""今天是 {date:%Y-%m-%d}，第 {week_no} 周。本周专题：{topic}
+
+写给汽车密封系统产品开发岗的工程师，一次讲透一个主题。按下面骨架写到底：
+
+1. 一句话定义与它在图纸/流程中的位置
+2. 怎么测：标准号、设备与压头几何、试样尺寸、环境条件、读数方式、取值规则
 3. 参数族或标尺对比表
-4. 典型值表（部位×材料×数值，标注“工程参考非规范”）
-5. 该参数升高/降低的连锁影响表（性能→后果）
+4. 典型值表（部位 × 材料 × 数值，标注“工程参考非规范”）
+5. 该参数升高/降低的连锁影响表（性能 → 后果）
 6. 配方与设计杠杆表
-7. 温度/时间/老化导致的漂移
-8. 图纸与规范该怎么写（给代码块示例）
+7. 温度 / 时间 / 老化导致的漂移
+8. 图纸与规范该怎么写（代码块示例）
 9. 5–6 个测量或应用陷阱
-10. 延伸到当前产品与技术方向（可提及库博标准 Fortrex / FlexiFit / FlexiCore 等公开产品线）
-11. 自测 5 题 + 「### 参考答案」（不要用 details 标签）
+10. 延伸到当前产品与技术方向（可提及 Fortrex / FlexiFit / FlexiCore 等公开产品线）
+11. 自测 5 题 + 「### 参考答案」
 
-长度：正文 3000–3800 字，必须完整写完参考答案，不得中途截断。
-所有英文术语首次出现给中文。"""
+长度：3000–3800 字，必须写完参考答案。
+术语首次出现中文 + 英文并列。"""
 
 
 def build_news_prompt(date: dt.date, feeds: dict[str, list[str]], quotes: list[str]) -> str:
@@ -251,7 +293,7 @@ def build_news_prompt(date: dt.date, feeds: dict[str, list[str]], quotes: list[s
     material = "\n\n".join(blocks)
     quote_text = "、".join(quotes) if quotes else "未获取到"
 
-    return f"""今天是 {date:%Y-%m-%d}。读者想花 5 分钟搞清楚这两天世界上发生了什么重要的事。
+    return f"""今天是 {date:%Y-%m-%d}。读者想花 6 分钟搞清楚这两天世界上发生了什么重要的事。
 
 # 素材（只能使用这些内容，禁止编造数字、禁止补充素材里没有的事实）
 
@@ -268,7 +310,7 @@ def build_news_prompt(date: dt.date, feeds: dict[str, list[str]], quotes: list[s
 3 条，每条一句话说清「发生了什么」，按重要性排序。
 
 ## 世界 / ## 中国 / ## 科技与商业 / ## 市场
-每块 2–3 条。每条用这个格式：
+每块 3–4 条。每条用这个格式：
 
 ### 一句话标题
 **是什么事**：1–2 句，把事实讲完整，让读者不点原文也知道发生了什么。有数字就写数字，有来源就标来源。
@@ -278,15 +320,15 @@ def build_news_prompt(date: dt.date, feeds: dict[str, list[str]], quotes: list[s
 用一句话说清今天最该记住的是什么。
 
 # 硬性规则
-- 总条数 10–13 条，总长度 1300–1700 字，控制在 5–6 分钟能读完。
-- 选题只看重要性：地缘冲突、政策转向、重大经济数据、科技突破、大公司动向、市场异动、重大社会事件。**挑真正影响很多人的事，不要挑“和某个行业相关”的事。**
-- 「我的理解」只谈这件事本身：因果、二阶影响、反常识之处、该盯什么。**不要往任何职业、行业或岗位上靠，不要给学习或工作建议。**
-- 素材是完整正文的可以写细节；只有标题的（国际要闻、科技那两组），只写标题能确定的信息，看不懂就整条略过，不要猜。
-- 判断必须与事实分开，标注清楚。
-- 不要输出链接，读者不需要点进去。"""
+- 总条数 14–18 条，总长度 1800–2300 字，控制在 6 分钟能读完。
+- 选题只看重要性：地缘冲突、政策转向、重大经济数据、科技突破、大公司动向、市场异动、重大社会事件。
+- 「我的理解」只谈这件事本身，不要往任何职业或行业上靠，不要给建议。
+- 素材是完整正文的可以写细节；只有标题的只写标题能确定的信息，看不懂就整条略过。
+- 判断必须与事实分开。
+- 不要输出链接。"""
 
 
-def call_llm(prompt: str, system: str, max_tokens: int) -> str:
+def call_llm(prompt: str, system: str, max_tokens: int, label: str) -> str:
     key = os.environ.get("DEEPSEEK_API_KEY")
     if not key:
         raise SystemExit("缺少环境变量 DEEPSEEK_API_KEY")
@@ -309,12 +351,11 @@ def call_llm(prompt: str, system: str, max_tokens: int) -> str:
     choice = data["choices"][0]
     text = choice["message"]["content"].strip()
     if choice.get("finish_reason") == "length":
-        print("[warn] 输出达到 max_tokens，可能被截断", file=sys.stderr)
+        print(f"[warn] {label} 达到 max_tokens，可能被截断", file=sys.stderr)
     return text
 
 
 # ---------------------------------------------------------------- 渲染
-
 
 CSS = """
 :root{--bg:#fbfaf7;--fg:#1c1b19;--muted:#6b6862;--line:#e2ded6;--card:#fff;
@@ -387,7 +428,7 @@ def _title_of(path: Path) -> str:
 
 
 def rebuild_index() -> None:
-    def cards(pattern: str, drop: str) -> str:
+    def cards(pattern: str) -> str:
         items = []
         for p in sorted(DOCS.glob(pattern), reverse=True):
             d = re.search(r"(\d{4}-\d{2}-\d{2})", p.name)
@@ -401,16 +442,18 @@ def rebuild_index() -> None:
         ) or "<p>还没有内容。</p>"
 
     body = (
-        "<h1>库博标准 · 每日学习包</h1>"
-        "<p>每天两份：一份学英语和专业知识，一份 5 分钟看完新闻。</p>"
-        '<div class="sec">学习包 · 英语 + 产品专题</div>'
-        f'<div class="cards">{cards("*-lesson.md", "lesson")}</div>'
-        '<div class="sec">每日新闻 · 5 分钟</div>'
-        f'<div class="cards">{cards("*-news.md", "news")}</div>'
+        "<h1>每日英语 · 每日新闻</h1>"
+        "<p>每天两份：一份英语（词汇 / 句式 / 连词 / 法国口音听力），一份 6 分钟新闻。</p>"
+        '<div class="sec">英语 · 每天</div>'
+        f'<div class="cards">{cards("*-english.md")}</div>'
+        '<div class="sec">每日新闻</div>'
+        f'<div class="cards">{cards("*-news.md")}</div>'
+        '<div class="sec">密封系统专题 · 每周日</div>'
+        f'<div class="cards">{cards("*-sealing.md")}</div>'
         f"<footer>更新于 {dt.datetime.now(CST):%Y-%m-%d %H:%M}</footer>"
     )
     (DOCS / "index.html").write_text(
-        PAGE.format(title="库博标准 · 每日学习包", css=CSS, body=body), encoding="utf-8"
+        PAGE.format(title="每日英语 · 每日新闻", css=CSS, body=body), encoding="utf-8"
     )
 
 
@@ -424,7 +467,7 @@ def push(text: str) -> None:
         return
     if "feishu" in hook or "larksuite" in hook:
         payload = {"msg_type": "text", "content": {"text": text}}
-    else:  # 钉钉 / 企业微信
+    else:
         payload = {"msgtype": "text", "text": {"content": text}}
     try:
         req = urllib.request.Request(
@@ -459,57 +502,75 @@ def main() -> None:
     day_no = (today - START_DATE).days + 1
     if day_no < 1:
         day_no = 1
-    en_focus, product_topic = topic_for(day_no)
+    week_no = (today - START_DATE).days // 7 + 1
 
+    theme, theme_desc = theme_for(day_no)
+    word_zone = word_zone_for(day_no)
     news_only = os.environ.get("NEWS_ONLY", "").strip() == "1"
-    lesson_stem = f"{today:%Y-%m-%d}-Day{day_no:02d}-lesson"
 
-    if news_only and (DOCS / f"{lesson_stem}.md").exists():
-        lesson = (DOCS / f"{lesson_stem}.md").read_text(encoding="utf-8")
-        print("[gen] 仅更新新闻，沿用已有的学习包")
+    DOCS.mkdir(exist_ok=True)
+    english_stem = f"{today:%Y-%m-%d}-english"
+    news_stem = f"{today:%Y-%m-%d}-news"
+    sealing_stem = f"{today:%Y-%m-%d}-sealing"
+
+    if news_only and (DOCS / f"{english_stem}.md").exists():
+        english = (DOCS / f"{english_stem}.md").read_text(encoding="utf-8")
+        print("[gen] 仅更新新闻，沿用已有英语文件")
     else:
-        print(f"[gen] Day {day_no} {today} · {product_topic}")
-        lesson = call_llm(build_lesson_prompt(day_no, today, en_focus, product_topic),
-                          SYSTEM_LESSON, 8192)
+        print(f"[gen] 英语 Day {day_no} · {theme}")
+        english = call_llm(
+            build_english_prompt(day_no, today, theme, theme_desc, word_zone),
+            SYSTEM_ENGLISH, 8192, "英语")
 
     feeds = {
-        "全球快讯（正文完整）": wallstreetcn("global-channel", 10),
-        "中国快讯（正文完整）": sina_flash(14),
-        "美股与海外市场（正文完整）": wallstreetcn("us-stock-channel", 6),
+        "全球快讯（正文完整）": wallstreetcn("global-channel", 12),
+        "中国快讯（正文完整）": sina_flash(16),
+        "美股与海外市场（正文完整）": wallstreetcn("us-stock-channel", 8),
         "国际要闻（标题+摘要）": rss_feed("https://feeds.bbci.co.uk/zhongwen/simp/rss.xml", 8),
         "全球要闻（标题+摘要）": rss_feed("https://cn.nytimes.com/rss/", 6),
-        "综合要闻（只有标题）": google_news("国际要闻 when:2d", 8),
+        "综合要闻（只有标题）": google_news("国际要闻 when:2d", 10),
         "科技与商业（只有标题）": google_news("科技 OR 人工智能 OR 芯片 when:2d", 8),
     }
     quotes = market_quotes()
 
     print("[gen] 每日新闻")
-    bulletin = call_llm(build_news_prompt(today, feeds, quotes), SYSTEM_NEWS, 5000)
-    if "一句话总结" not in bulletin:  # 兜底：输出被截断就重试一次
+    bulletin = call_llm(build_news_prompt(today, feeds, quotes), SYSTEM_NEWS, 8192, "新闻")
+    if "一句话总结" not in bulletin:
         print("[retry] 新闻输出不完整，重试", file=sys.stderr)
-        bulletin = call_llm(build_news_prompt(today, feeds, quotes), SYSTEM_NEWS, 5000)
+        bulletin = call_llm(build_news_prompt(today, feeds, quotes), SYSTEM_NEWS, 8192, "新闻")
 
-    DOCS.mkdir(exist_ok=True)
-    news_stem = f"{today:%Y-%m-%d}-news"
-    lesson_title = f"Day {day_no:02d} · {today:%Y-%m-%d}｜{product_topic}"
+    english_title = f"英语 · {today:%Y-%m-%d}｜{theme}"
     news_title = f"每日新闻 · {today:%Y-%m-%d}"
 
-    for stem, text, title in ((lesson_stem, lesson, lesson_title),
-                              (news_stem, bulletin, news_title)):
-        (DOCS / f"{stem}.md").write_text(text, encoding="utf-8")
-        (DOCS / f"{stem}.html").write_text(render(text, title), encoding="utf-8")
+    (DOCS / f"{english_stem}.md").write_text(english, encoding="utf-8")
+    (DOCS / f"{english_stem}.html").write_text(render(english, english_title), encoding="utf-8")
+    (DOCS / f"{news_stem}.md").write_text(bulletin, encoding="utf-8")
+    (DOCS / f"{news_stem}.html").write_text(render(bulletin, news_title), encoding="utf-8")
 
-    # 稳定的“今天”地址，方便加到主屏幕或推送链接
-    (DOCS / "today.html").write_text(render(lesson, lesson_title), encoding="utf-8")
+    (DOCS / "today.html").write_text(render(english, english_title), encoding="utf-8")
     (DOCS / "today-news.html").write_text(render(bulletin, news_title), encoding="utf-8")
+
+    sealing_title = None
+    if today.weekday() == 6:  # 周日出一期密封系统专题
+        topic = sealing_topic_for(week_no)
+        print(f"[gen] 密封系统专题：{topic}")
+        sealing = call_llm(build_sealing_prompt(today, week_no, topic),
+                           SYSTEM_SEALING, 8192, "密封专题")
+        sealing_title = f"密封系统专题 · {topic}"
+        (DOCS / f"{sealing_stem}.md").write_text(sealing, encoding="utf-8")
+        (DOCS / f"{sealing_stem}.html").write_text(render(sealing, sealing_title), encoding="utf-8")
+        (DOCS / "today-sealing.html").write_text(render(sealing, sealing_title), encoding="utf-8")
+
     rebuild_index()
 
     base = site_url()
-    lines = [f"【Day {day_no:02d}】{product_topic}", f"英语：{en_focus}", ""]
+    lines = [f"【{today:%m-%d}】英语：{theme}", ""]
     if base:
-        lines += [f"学习包：{base}today.html", f"新闻：{base}today-news.html"]
+        lines += [f"英语：{base}today.html", f"新闻：{base}today-news.html"]
+        if sealing_title:
+            lines += [f"密封专题：{base}today-sealing.html"]
     push("\n".join(lines))
-    print("[done]", lesson_stem, news_stem)
+    print("[done]", english_stem, news_stem, sealing_title or "")
 
 
 if __name__ == "__main__":
