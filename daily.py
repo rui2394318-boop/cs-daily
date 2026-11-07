@@ -320,10 +320,18 @@ def build_news_prompt(date: dt.date, feeds: dict[str, list[str]], quotes: list[s
 ## 一句话总结
 用一句话说清今天最该记住的是什么。
 
+## 汽车与密封前沿（固定 1 条）
+从「汽车与密封前沿」这组素材里挑 **1 条最像"行业前沿"的**（新技术、新材料、新产线、新标准、大厂动向、供应链变化）。
+格式：
+### 一句话标题
+**是什么事**：1–2 句，写清楚谁做了什么、有什么数字。
+**为什么算前沿**：1–2 句，说明它相对于现状新在哪里。
+
 # 硬性规则
-- 总条数 14–18 条，总长度 1800–2300 字，控制在 6 分钟能读完。
+- 全球/中国/科技/市场四块共 14–18 条，再加前沿 1 条，总长度 1900–2400 字，控制在 6–7 分钟能读完。
 - 选题只看重要性：地缘冲突、政策转向、重大经济数据、科技突破、大公司动向、市场异动、重大社会事件。
 - 「我的理解」只谈这件事本身，不要往任何职业或行业上靠，不要给建议。
+- 前沿那条只写素材里能确定的信息，别把"据说"写成事实。
 - 素材是完整正文的可以写细节；只有标题的只写标题能确定的信息，看不懂就整条略过。
 - 判断必须与事实分开。
 - 不要输出链接。"""
@@ -449,8 +457,6 @@ def rebuild_index() -> None:
         f'<div class="cards">{cards("*-english.md")}</div>'
         '<div class="sec">每日新闻</div>'
         f'<div class="cards">{cards("*-news.md")}</div>'
-        '<div class="sec">密封系统专题 · 每周日</div>'
-        f'<div class="cards">{cards("*-sealing.md")}</div>'
         f"<footer>更新于 {dt.datetime.now(CST):%Y-%m-%d %H:%M}</footer>"
     )
     (DOCS / "index.html").write_text(
@@ -512,7 +518,6 @@ def main() -> None:
     DOCS.mkdir(exist_ok=True)
     english_stem = f"{today:%Y-%m-%d}-english"
     news_stem = f"{today:%Y-%m-%d}-news"
-    sealing_stem = f"{today:%Y-%m-%d}-sealing"
 
     if news_only and (DOCS / f"{english_stem}.md").exists():
         english = (DOCS / f"{english_stem}.md").read_text(encoding="utf-8")
@@ -531,6 +536,8 @@ def main() -> None:
         "全球要闻（标题+摘要）": rss_feed("https://cn.nytimes.com/rss/", 6),
         "综合要闻（只有标题）": google_news("国际要闻 when:2d", 10),
         "科技与商业（只有标题）": google_news("科技 OR 人工智能 OR 芯片 when:2d", 8),
+        "汽车与密封前沿（只有标题）": google_news(
+            "汽车密封 OR 密封条 OR EPDM OR 汽车零部件 OR Cooper Standard when:7d", 10),
     }
     quotes = market_quotes()
 
@@ -552,26 +559,14 @@ def main() -> None:
     (DOCS / "today-news.html").write_text(render(bulletin, news_title), encoding="utf-8")
 
     sealing_title = None
-    if today.weekday() == 6:  # 周日出一期密封系统专题
-        topic = sealing_topic_for(week_no)
-        print(f"[gen] 密封系统专题：{topic}")
-        sealing = call_llm(build_sealing_prompt(today, week_no, topic),
-                           SYSTEM_SEALING, 8192, "密封专题")
-        sealing_title = f"密封系统专题 · {topic}"
-        (DOCS / f"{sealing_stem}.md").write_text(sealing, encoding="utf-8")
-        (DOCS / f"{sealing_stem}.html").write_text(render(sealing, sealing_title), encoding="utf-8")
-        (DOCS / "today-sealing.html").write_text(render(sealing, sealing_title), encoding="utf-8")
-
     rebuild_index()
 
     base = site_url()
     lines = [f"【{today:%m-%d}】英语：{theme}", ""]
     if base:
         lines += [f"英语：{base}today.html", f"新闻：{base}today-news.html"]
-        if sealing_title:
-            lines += [f"密封专题：{base}today-sealing.html"]
     push("\n".join(lines))
-    print("[done]", english_stem, news_stem, sealing_title or "")
+    print("[done]", english_stem, news_stem)
 
 
 if __name__ == "__main__":
